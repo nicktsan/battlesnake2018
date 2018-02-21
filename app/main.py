@@ -2,17 +2,13 @@ import bottle
 import os
 import random
 
-
-
 @bottle.route('/')
 def static():
-	return "the server is running"
-
+	return "the server is running hello world"
 
 @bottle.route('/static/<path:path>')
 def static(path):
 	return bottle.static_file(path, root='static/')
-
 
 @bottle.post('/start')
 def start():

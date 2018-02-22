@@ -40,7 +40,7 @@ def move():
 	
 	directions = ['up', 'down', 'left', 'right']
 	#direction = random.choice(directions)
-	direction = 'left'
+	direction = 'down'
 	print direction
 	return {
 		'move': direction,

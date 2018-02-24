@@ -1,3 +1,4 @@
+from battlesnake_functions import *
 import bottle
 import os
 import random
@@ -61,11 +62,17 @@ def move():
 	game_id = data.get('game_id')
 	board_width = data.get('width')
 	board_height = data.get('height')
+	mysnake = data['you']['body']['data']
+	snake_list = data['snakes']
+	mysnake_head = mysnake[0] #should get the head's point
 	# TODO: Do things with data
 	
+	above_headx, above_heady = get_up(mysnake_head)
 	directions = ['up', 'down', 'left', 'right']
-	direction = random.choice(directions)
-
+	#direction = random.choice(directions)
+	direction = 'up'
+	if (mysnake_head['y'] == 0):
+		direction = 'left'
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

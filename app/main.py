@@ -1,18 +1,35 @@
 import bottle
 import os
 import random
+import numpy as np
+import tflearn
+import math
+from tflearn.layers.core import input_data, fully_connected
+from tflearn.layers.estimator import regression
+from statistics import mean
+from collections import Counter
 
-
+class SnakeNN:
+	def __init__(self, initial_games = 10000, test_games = 1000, goal_steps = 2000, lr = 1e-2, filename = 'battlesnake_nn.tflearn'):
+		self.initial_games = initial_games
+		self.test_games = test_games
+		self.goal_steps = goal_steps
+		self.lr = lr
+		self.filename = filename
+		self.vectors_and_keys = [
+				[[-1, 0], 0],
+				[[0, 1], 1],
+				[[1, 0], 2],
+				[[0, -1], 3]
+		]
 
 @bottle.route('/')
 def static():
-	return "the server is running"
-
+	return "the server is running hello world"
 
 @bottle.route('/static/<path:path>')
 def static(path):
 	return bottle.static_file(path, root='static/')
-
 
 @bottle.post('/start')
 def start():
@@ -32,22 +49,26 @@ def start():
 		'color': '#00FF00',
 		'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
 		'head_url': head_url,
-		'name': 'battlesnake-python'
+		'name': 'nicksnek',
+		'head_type': 'fang',
+		'tail_type': 'block-bum'
 	}
 
 
 @bottle.post('/move')
 def move():
 	data = bottle.request.json
-
+	game_id = data.get('game_id')
+	board_width = data.get('width')
+	board_height = data.get('height')
 	# TODO: Do things with data
 	
 	directions = ['up', 'down', 'left', 'right']
 	direction = random.choice(directions)
-	print direction
+
 	return {
 		'move': direction,
-		'taunt': 'battlesnake-python!'
+		'taunt': 'dat is not de wae'
 	}
 
 

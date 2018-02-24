@@ -64,8 +64,8 @@ def move():
 	# TODO: Do things with data
 	
 	directions = ['up', 'down', 'left', 'right']
-	#direction = random.choice(directions)
-	direction = 'down'
+	direction = random.choice(directions)
+
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

@@ -77,7 +77,7 @@ def start():
 @bottle.post('/move')
 def move():
 	data = bottle.request.json
-	snek, grid = init(data)
+	#snek, grid = init(data)
 	game_id = data.get('game_id')
 	board_width = data.get('width')
 	board_height = data.get('height')

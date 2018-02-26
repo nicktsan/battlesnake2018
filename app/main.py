@@ -95,10 +95,10 @@ def move():
 	#	direction = 'down'
 	#elif (mysnake_head['y'] == board_height and mysnake_head['x'] == board_width):
 		#direction = 'up'
-	elif (mysnake_head['y'] == 0):
-		direction = 'left'
-	elif (mysnake_head['x'] == 0):
-		direction = 'right'
+	#elif (mysnake_head['y'] == 0):
+		#direction = 'left'
+	#elif (mysnake_head['x'] == 0):
+		#direction = 'right'
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

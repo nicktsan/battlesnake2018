@@ -77,7 +77,6 @@ def start():
 @bottle.post('/move')
 def move():
 	data = bottle.request.json
-	#snek, grid = init(data)
 	game_id = data.get('game_id')
 	board_width = data.get('width')
 	board_height = data.get('height')
@@ -90,16 +89,15 @@ def move():
 	directions = ['up', 'down', 'left', 'right']
 	direction = 'up'
 	#direction = random.choice(directions)
-	if (mysnake_head['y'] == 0):
+
+	if (mysnake_head['y'] == 0 and mysnake_head['x'] == 0):
+		direction = 'down'
+	elif (mysnake_head['y'] == board_height-1 and mysnake_head['x'] == board_width-1):
+		direction = 'up'
+	elif (mysnake_head['y'] == 0):
 		direction = 'left'
-	#if (mysnake_head['y'] == 0 and mysnake_head['x'] == 0):
-		#direction = 'down'
-	#elif (mysnake_head['y'] == board_height and mysnake_head['x'] == board_width):
-		#direction = 'up'
-	#elif (mysnake_head['y'] == 0):
-		#direction = 'left'
-	#elif (mysnake_head['x'] == 0):
-		#direction = 'right'
+	elif (mysnake_head['x'] == 0):
+		direction = 'right'
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

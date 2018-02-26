@@ -47,8 +47,8 @@ def start():
 	# TODO: Do things with data
 
 	return {
-		'color': '#00FF00',
-		'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
+		'color': '#FF0000',
+		'taunt': 'dat is not de wae',
 		'head_url': head_url,
 		'name': 'nicksnek',
 		'head_type': 'fang',
@@ -64,15 +64,26 @@ def move():
 	board_height = data.get('height')
 	mysnake = data['you']['body']['data']
 	snake_list = data['snakes']
-	mysnake_head = mysnake[0] #should get the head's point
-	# TODO: Do things with data
-	
-	above_headx, above_heady = get_up(mysnake_head)
+	food_list = data['food']
 	directions = ['up', 'down', 'left', 'right']
-	#direction = random.choice(directions)
-	direction = 'up'
-	if (mysnake_head['y'] == 0):
-		direction = 'left'
+	board = init_board(food_list, snake_list, board_width, board_height)
+	
+	mysnake_head = mysnake[0] #should get the head's point
+	is_left = check_left(mysnake_head, board)
+	is_right = check_right(mysnake_head, board, board_width)
+	is_up = check_up(mysnake_head, board)
+	is_down = check_down(mysnake_head, board, board_height)
+	# TODO: Do things with data
+	if (is_up == True):
+		directions.remove('up')
+	if (is_down == True):
+		directions.remove('down')
+	if (is_left == True):
+		directions.remove('left')
+	if (is_right == True):
+		directions.remove('right')
+	
+	direction = random.choice(directions)
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

@@ -92,11 +92,11 @@ def move():
 
 	if (mysnake_head['y'] == 0 and mysnake_head['x'] == 0):
 		direction = 'down'
-	elif (mysnake_head['y'] == board_height-1 and mysnake_head['x'] == board_width-1):
+	if (mysnake_head['y'] == board_height-1 and mysnake_head['x'] == board_width-1):
 		direction = 'up'
-	elif (mysnake_head['y'] == 0):
+	if (mysnake_head['y'] == 0):
 		direction = 'left'
-	elif (mysnake_head['x'] == 0):
+	if (mysnake_head['y'] == board_height-1):
 		direction = 'right'
 	return {
 		'move': direction,

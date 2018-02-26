@@ -96,8 +96,16 @@ def move():
 		direction = 'up'
 	elif (mysnake_head['y'] == 0 and mysnake_head['x'] == board_width-1 ):    #top right
 		direction = 'left'
-	elif (mysnake_head['y'] == 'board_height'-1 and mysnake_head['x'] == 0):   #bottom left
+	elif (mysnake_head['y'] == board_height-1 and mysnake_head['x'] == 0):   #bottom left
 		direction = 'right'
+	elif (mysnake_head['y'] == 0):   #top
+		direction = 'left'
+	elif (mysnake_head['x'] == 0):   #left
+		direction = 'down'
+	elif (mysnake_headp['y'] == board_height-1):    #bottom
+		direction = 'right'
+	elif (mysnake_head['x'] == board_width-1):     #right
+		direction = 'up'
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

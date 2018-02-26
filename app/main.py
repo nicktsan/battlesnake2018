@@ -90,13 +90,13 @@ def move():
 	direction = 'up'
 	#direction = random.choice(directions)
 
-	if (mysnake_head['y'] == 0 and mysnake_head['x'] == 0):
+	if (mysnake_head['y'] == 0 and mysnake_head['x'] == 0):   #top left
 		direction = 'down'
-	elif (mysnake_head['y'] == 'board_height'-1 and mysnake_head['x'] == 'board_width'-1):
+	elif (mysnake_head['y'] == board_height-1 and mysnake_head['x'] == board_width-1):   #bottom right
 		direction = 'up'
-	elif (mysnake_head['y'] == 0):
+	elif (mysnake_head['y'] == 0 and mysnake_head['x'] == board_width-1 ):    #top right
 		direction = 'left'
-	elif (mysnake_head['y'] == 'board_height'-1):
+	elif (mysnake_head['y'] == 'board_height'-1 and mysnake_head['x'] == 0):   #bottom left
 		direction = 'right'
 	return {
 		'move': direction,

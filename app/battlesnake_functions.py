@@ -1,3 +1,4 @@
+
 def init_board(food_list, snake_list, width, height):
 	board = [ ([0] * height) for row in xrange(width)]
 	for food in food_list['data']:

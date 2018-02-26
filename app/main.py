@@ -88,6 +88,7 @@ def move():
 	
 	above_headx, above_heady = get_up(mysnake_head)
 	directions = ['up', 'down', 'left', 'right']
+	direction = 'up'
 	#direction = random.choice(directions)
 	if (mysnake_head['y'] == 0):
 		direction = 'left'

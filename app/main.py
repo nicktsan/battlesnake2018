@@ -78,8 +78,7 @@ def move():
 	#testing calc_distance
 	#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
 	#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], 2, 3)
-	#test_between = is_between(board, mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
-
+	test_between = check_between(board, mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
 	# TODO: Do things with data
 	if (is_up == True):
 		directions.remove('up')

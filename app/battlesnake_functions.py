@@ -26,11 +26,6 @@ def check_left(head, board):
 	if (head['x'] == 0):
 		return True
 	#check for snakes
-	"""
-	if (board[head['x']-1][head['y']] != 'food' and board[head['x']-1][head['y']] != 0):
-		return True
-	return False
-	"""
 	return is_obstacle(board, head['x']-1, head['y'])
 
 #check if obstacles are to the right of our snake
@@ -39,11 +34,6 @@ def check_right(head, board, board_width):
 	if (head['x'] == board_width-1):
 		return True
 	#check for snakes
-	"""
-	if (board[head['x']+1][head['y']] != 'food' and board[head['x']+1][head['y']] != 0):
-		return True
-	return False
-	"""
 	return is_obstacle(board, head['x']+1, head['y'])
 
 #check if obstacles are above our snake
@@ -52,11 +42,6 @@ def check_up(head, board):
 	if (head['y'] == 0):
 		return True
 	#check for snakes
-	"""
-	if (board[head['x']][head['y']-1] != 'food' and board[head['x']][head['y']-1] != 0):
-		return True
-	return False
-	"""
 	return is_obstacle(board, head['x'], head['y']-1)
 
 #check if obstacles are below our snake
@@ -65,11 +50,6 @@ def check_down(head, board, board_height):
 	if (head['y'] == board_height-1):
 		return True
 	#check for snakes
-	"""
-	if (board[head['x']][head['y']+1] != 'food' and board[head['x']][head['y']+1] != 0):
-		return True
-	return False
-	"""
 	return is_obstacle(board, head['x'], head['y']+1)
 
 #calculates distance between point 1 and point 2

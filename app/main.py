@@ -70,10 +70,10 @@ def move():
 
 	board = init_board(food_list, snake_list, board_width, board_height)
 	
-	is_left = check_left(mysnake_head, board)
-	is_right = check_right(mysnake_head, board, board_width)
-	is_up = check_up(mysnake_head, board)
-	is_down = check_down(mysnake_head, board, board_height)
+	is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
+	is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
+	is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
+	is_down = check_down(mysnake_head['x'], mysnake_head['y'], board)
 	
 	#testing calc_distance
 	#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])

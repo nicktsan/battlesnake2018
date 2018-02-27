@@ -16,7 +16,7 @@ def init_board(food_list, snake_list, width, height):
 	return board
 
 #to refer an x,y point on the board, type it as board[y][x]
-def is_obstacle(board, x, y):
+def is_obstacle(x, y, board):
 	if (board[y][x] != 'food' and board[y][x] != 0):
 		return True
 	return False
@@ -32,41 +32,41 @@ def find_slope(x1, y1, x2, y2):
 
 #check if obstacles are to the left of our snake. Returns True
 #if something is to the left, and False if something isn't to the left.
-def check_left(head, board):
+def check_left(x, y, board):
 	#check for wall
-	if (head['x'] == 0):
+	if (x == 0):
 		return True
 	#check for snakes
-	return is_obstacle(board, head['x']-1, head['y'])
+	return is_obstacle(x-1, y, board)
 
 #check if obstacles are to the right of our snake
-def check_right(head, board, board_width):
+def check_right(x, y, board):
 	#check for wall
-	if (head['x'] == board_width-1):
+	if (x == len(board[0])-1):
 		return True
 	#check for snakes
-	return is_obstacle(board, head['x']+1, head['y'])
+	return is_obstacle(x+1, y, board)
 
 #check if obstacles are above our snake
-def check_up(head, board):
+def check_up(x, y, board):
 	#check for wall
-	if (head['y'] == 0):
+	if (y == 0):
 		return True
 	#check for snakes
-	return is_obstacle(board, head['x'], head['y']-1)
+	return is_obstacle(x, y-1, board)
 
 #check if obstacles are below our snake
-def check_down(head, board, board_height):
+def check_down(x, y, board):
 	#check for wall
-	if (head['y'] == board_height-1):
+	if (y == len(board)-1):
 		return True
 	#check for snakes
-	return is_obstacle(board, head['x'], head['y']+1)
+	return is_obstacle(x, y+1, board)
 
 #check if obstacle is above and to the left of snake head
 """
-def check_upleft(head, board):
-	if (head['x'] == 0):
+def check_upleft(x, y, board):
+	if (x == 0):
 		return True
 	return check_up()
 
@@ -95,14 +95,14 @@ def is_between(board, x1, y1, x2, y2):
 	#check if there is something in that line.
 	if (y1 == y2):
 		return all(
-			is_obstacle(board, x, y1) == True
+			is_obstacle(x, y1, board) == True
 			for x in range(lower_x+1, higher_x)
 		)
 	#second case: if, shortest path from point 1 to point 2 is a vertical line,
 	#check if there is something in that line.
 	if (x1 == x2):
 		return all(
-			is_obstacle(board, x1, y) == True
+			is_obstacle(x1, y, board) == True
 			for y in range(lower_y+1, higher_y)
 		)
 	slope = find_slope(x1, y1, x2, y2)

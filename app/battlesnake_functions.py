@@ -16,6 +16,7 @@ def init_board(food_list, snake_list, width, height):
 	return board
 
 #to refer an x,y point on the board, type it as board[y][x]
+#checks if point xy is an obstacle
 def is_obstacle(x, y, board):
 	if (board[y][x] != 'food' and board[y][x] != 0):
 		return True
@@ -30,7 +31,7 @@ def find_slope(x1, y1, x2, y2):
 	return (float(rise)/float(run))*-1.0 #we need to multiply by -1 because y values become larger when you go down the grid.
 	#returns a positive or negative float, which will be our slope.
 
-#check if obstacles are to the left of our snake. Returns True
+#check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.
 def check_left(x, y, board):
 	#check for wall
@@ -39,7 +40,7 @@ def check_left(x, y, board):
 	#check for snakes
 	return is_obstacle(x-1, y, board)
 
-#check if obstacles are to the right of our snake
+#check if obstacles are to the right of point
 def check_right(x, y, board):
 	#check for wall
 	if (x == len(board[0])-1):
@@ -47,7 +48,7 @@ def check_right(x, y, board):
 	#check for snakes
 	return is_obstacle(x+1, y, board)
 
-#check if obstacles are above our snake
+#check if obstacles are above point
 def check_up(x, y, board):
 	#check for wall
 	if (y == 0):
@@ -55,7 +56,7 @@ def check_up(x, y, board):
 	#check for snakes
 	return is_obstacle(x, y-1, board)
 
-#check if obstacles are below our snake
+#check if obstacles are below point
 def check_down(x, y, board):
 	#check for wall
 	if (y == len(board)-1):
@@ -63,12 +64,29 @@ def check_down(x, y, board):
 	#check for snakes
 	return is_obstacle(x, y+1, board)
 
-#check if obstacle is above and to the left of snake head
-"""
+#check if obstacle is above and to the left of point
 def check_upleft(x, y, board):
-	if (x == 0):
+	if (x == 0 or y == 0):
 		return True
-	return check_up()
+	return is_obstacle(x-1, y-1, board)
+
+#check if obstacle is below and to the left of point
+def check_downleft(x, y, board):
+	if (x == 0 or y == len(board)-1):
+		return True
+	return is_obstacle(x-1, y+1, board)
+
+#check if obstacle is above and to the right of point
+def check_upright(x, y, board):
+	if (x == len(board[0])-1 or y == 0):
+		return True
+	return is_obstacle(x+1, y-1, board)
+
+#check if obstacle is below and to the right of point
+def check_downright(x, y, board):
+	if (x == len(board[0])-1 or y == len(board)-1):
+		return True
+	return is_obstacle(x+1, y+1, board)
 
 #calculates distance between point 1 and point 2
 def calc_distance(x1, y1, x2, y2):
@@ -76,7 +94,7 @@ def calc_distance(x1, y1, x2, y2):
 	vertical_distance = y1 - y2
 	total_distance = abs(horizontal_distance) + abs(vertical_distance)
 	return total_distance
-
+"""
 #returns False if nothing is in between the shortest path from point 1 to point 2.
 #returns True if something is in between the shortest path from point 1 to point 2.
 def is_between(board, x1, y1, x2, y2):

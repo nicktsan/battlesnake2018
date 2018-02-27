@@ -95,8 +95,6 @@ def calc_distance(x1, y1, x2, y2):
 	total_distance = abs(horizontal_distance) + abs(vertical_distance)
 	return total_distance
 
-def dfs():
-	return False
 #returns False if nothing is in between the shortest path from point 1 to point 2.
 #returns True if something is in between the shortest path from point 1 to point 2.
 def check_between(board, x1, y1, x2, y2):

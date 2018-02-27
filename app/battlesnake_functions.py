@@ -15,15 +15,18 @@ def init_board(food_list, snake_list, width, height):
 			board[x][y] = snake['id']
 	return board
 
+def is_obstacle(board, x, y):
+	if (board[x][y] != 'food' and board[x][y] != 0):
+		return True
+	return False
+
 #chick if obstacles are to the left of our snake
 def check_left(head, board):
 	#check for wall
 	if (head['x'] == 0):
 		return True
 	#check for snakes
-	if (board[head['x']-1][head['y']] != 'food' and board[head['x']-1][head['y']] != 0):
-		return True
-	return False
+	return is_obstacle(board, head['x']-1, head['y'])
 
 #check if obstacles are to the right of our snake
 def check_right(head, board, board_width):
@@ -31,9 +34,7 @@ def check_right(head, board, board_width):
 	if (head['x'] == board_width-1):
 		return True
 	#check for snakes
-	if (board[head['x']+1][head['y']] != 'food' and board[head['x']+1][head['y']] != 0):
-		return True
-	return False
+	return is_obstacle(board, head['x']+1, head['y'])
 
 #check if obstacles are above our snake
 def check_up(head, board):
@@ -41,9 +42,7 @@ def check_up(head, board):
 	if (head['y'] == 0):
 		return True
 	#check for snakes
-	if (board[head['x']][head['y']-1] != 'food' and board[head['x']][head['y']-1] != 0):
-		return True
-	return False
+	return is_obstacle(board, head['x'], head['y']-1)
 
 #check if obstacles are below our snake
 def check_down(head, board, board_height):
@@ -51,9 +50,7 @@ def check_down(head, board, board_height):
 	if (head['y'] == board_height-1):
 		return True
 	#check for snakes
-	if (board[head['x']][head['y']+1] != 'food' and board[head['x']][head['y']+1] != 0):
-		return True
-	return False
+	return is_obstacle(board, head['x'], head['y']+1)
 
 #calculates distance between point 1 and point 2
 def calc_distance(x1, y1, x2, y2):
@@ -65,7 +62,7 @@ def calc_distance(x1, y1, x2, y2):
 #returns False if nothing is in between the shortest path from point 1 to point 2.
 #returns True if something is in between the shortest path from point 1 to point 2.
 """
-def check_between(x1, y1, x2, y2):
+def check_between(board, x1, y1, x2, y2):
 	#first, find the bounds of the shortest path from point 1 to point 2.
 	lower_x = x1
 	higher_x = x2
@@ -77,8 +74,13 @@ def check_between(x1, y1, x2, y2):
 	if (y1 > y2):
 		lower_y = y2
 		higher_y = y1
+	#first case: if, shortest path from point 1 to point 2 is a horizontal line,
+	#check if there is something in that line.
+	if (y1 == y2):
+		return all(
 
-	#check all tiles within our shortest path bounds for snake bodies, including our own.
-
+		)
+	#second case: if, shortest path from point 1 to point 2 is a vertical line,
+	#check if there is something in that line.
 	return False
 """

@@ -1,6 +1,6 @@
 #create a board and fill it with food, snakes, and our snake
 def init_board(food_list, snake_list, width, height):
-	#initialize a 2d list of 0's with width rows and height columns
+	#initialize a 2d list of 0's with width columns and height rows.
 	board = [([0] * width) for row in xrange(height)]
 	#fill in food locations
 	for food in food_list['data']:
@@ -9,10 +9,10 @@ def init_board(food_list, snake_list, width, height):
 		board[y][x] = 'food'
 	#fill in snake body locations with their id
 	for snake in snake_list['data']: #snake contains all info within a snake's 'data'
-		for point in snake['body']['data']:
-			x = point['x']
-			y = point['y']
-			board[y][x] = snake['id']
+		for index in range(0, len(snake['body']['data'])):
+			x = snake['body']['data'][index]['x']
+			y = snake['body']['data'][index]['y']
+			board[y][x] = [snake['id'], index]
 	return board
 
 #to refer an x,y point on the board, type it as board[y][x]

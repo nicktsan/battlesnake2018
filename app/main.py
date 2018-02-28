@@ -67,6 +67,7 @@ def move():
 	food_list = data['food'] #use food_list['data'][int]['x'] to get the 'x' point of food at index int in the food list
 	directions = ['up', 'down', 'left', 'right']
 	mysnake_head = mysnake['body']['data'][0] #should get the head's point
+	mysnake_neck = mysnake['body']['data'][1] #should get the neck's point
 
 	board = init_board(food_list, snake_list, board_width, board_height)
 	
@@ -75,10 +76,6 @@ def move():
 	is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
 	is_down = check_down(mysnake_head['x'], mysnake_head['y'], board)
 	
-	#testing calc_distance
-	#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
-	#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], 2, 3)
-	test_between = check_between(board, mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
 	# TODO: Do things with data
 	if (is_up == True):
 		directions.remove('up')
@@ -88,8 +85,20 @@ def move():
 		directions.remove('left')
 	if (is_right == True):
 		directions.remove('right')
-	
 	direction = random.choice(directions)
+
+	#We only need to do advanced decision making if there is more than 1 viable choice that will not kill the snake.
+	if (len(directions) > 1):
+		#make a points list for the length of remaining viable directions.
+		points = np.zeros(len(directions))
+		#direction = directions[np.argmax(points)]
+		#testing calc_distance
+		#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
+		#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], 2, 3)
+		#test_between = check_between(board, mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
+
+
+	
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

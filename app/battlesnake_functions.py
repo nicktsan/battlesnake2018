@@ -15,6 +15,111 @@ def init_board(food_list, snake_list, width, height):
 			board[y][x] = snake['id']
 	return board
 
+#Takes in the board and our snakes head location
+#Goes through each tile location 2 tiles away and checks
+#what is in it.
+#Throw in other fucntions depending on what is present
+def checkTwoTilesAway(board, x, y):
+	#checks for if the locations 2 tiles away are out of the board
+	rowMinus1 = False
+	rowMinus2 = False
+	rowPlus1 = False
+	rowPlus2 = False
+	colMinus1 = False
+	colMinus2 = False
+	colPlus1 = False
+	colPlus2 = False
+	if(x - 2 < 0):
+		rowMinus2 = True
+	if(x - 1 < 0):
+		rowMinus1 = True
+	if(y - 2 < 0):
+		colMinus2 = True
+	if(y - 1 < 0):
+		colMinus2 = True
+	if(x + 1 > len(board)):
+		rowPlus1 = True
+	if(x + 2 > len(board)):
+		rowPlus2 = True
+	if(y + 2 > len(board[0])):
+		colPlus2 = True
+	if(y + 1 > len(board[0])):
+		colPlus1 = True
+	#Goes through each location 2 tiles away and sets
+	#it's var to waht is at the board at that point
+	# x - 2 && y - 2
+	if(rowMinus2 && colMinus2):
+		atLocation = board[x - 2][y - 2]
+	# x - 2 && y - 1
+	if(rowMinus2 && colMinus1):
+		atLocation = board[x - 2][y - 1]
+	# x - 2 && y
+	if(rowMinus2):
+		atLocation = board[x - 2][y]
+	# x - 2 && y + 1
+	if(rowMinus2 && colPlus1):
+		atLocation = board[x - 2][y + 1]
+	# x - 2 && y + 2
+	if(rowMinus2 && colPlus2):
+		atLocation = board[x - 2][y + 2]		 
+	# x - 1 && y - 2
+	if(rowMinus1 && colMinus2):
+		atLocation = board[x - 1][y - 2]
+	# x - 1 && y - 1
+	if(rowMinus1 && colMinus1):
+		atLocation = board[x - 1][y - 1]
+	# x - 1 && y
+	if(rowMinus1):
+		atLocation = board[x - 1][y]
+	# x - 1 && y + 1
+	if(rowMinus1 && colPlus1):
+		atLocation = board[x - 1][y + 1]
+	# x - 1 && y + 2
+	if(rowMinus1 && colPlus2):
+		atLocation = board[x - 1][y + 2]
+	# x && y - 2
+	if(colMinus2):
+		atLocation = board[x][y - 2]
+	# x && y - 1
+	if(colMinus1):
+		atLocation = board[x][y - 1]
+	# x && y + 1
+	if(colPlus1):
+		atLocation = board[x][y + 1]
+	# x && y + 2
+	if(colPlus2):
+		atLocation = board[x][y + 2]
+	# x + 1 && y - 2
+	if(rowPlus1 && colMinus2):
+		atLocation = board[x + 1][y - 2]
+	# x + 1 && y - 1
+	if(rowPlus1 && colMinus1):
+		atLocation = board[x + 1][y - 1]
+	# x + 1 && y
+	if(rowPlus1):
+		atLocation = board[x + 1][y]
+	# x + 1 && y + 1
+	if(rowPlus1 && colPlus1):
+		atLocation = board[x + 1][y + 1]
+	# x + 1 && y + 2
+	if(rowPlus1 && colPlus2):
+		atLocation = board[x + 1][y + 2]
+	# x + 2 && y - 2
+	if(rowPlus2 && colMinus2):
+		atLocation = board[x + 2][y - 2]
+	# x + 2 && y - 1
+	if(rowPlus2 && colMinus1):
+		atLocation = board[x + 2][y - 1]
+	# x + 2 && y
+	if(rowPlus2):
+		atLocation = board[x + 2][y]
+	# x + 2 && y + 1
+	if(rowPlus2 && colPlus1):
+		atLocation = board[x + 2][y + 1]
+	# x + 2 && y + 2
+	if(rowPlus2 && colPlus2):
+		atLocation = board[x + 2][y + 2]
+		 
 #to refer an x,y point on the board, type it as board[y][x]
 #checks if point xy is an obstacle
 def is_obstacle(x, y, board):

@@ -90,15 +90,19 @@ def move():
 	#We only need to do advanced decision making if there is more than 1 viable choice that will not kill the snake.
 	if (len(directions) > 1):
 		#make a points list for the length of remaining viable directions.
-		points = np.zeros(len(directions))
-		#direction = directions[np.argmax(points)]
-		#testing calc_distance
-		#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
-		#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], 2, 3)
-		#test_between = check_between(board, mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
+		points = np.zeros(len(directions)) #np.zeros(x) creates an array of zeros of length x.
+		
+		#TODO assign points to corresponding choices
 
 
-	
+
+		#calculate which remaining option has the most points
+		max_point_index = np.argwhere(points == np.amax(points))
+		top_dirs = []
+		#create a list of indeces of highest points.
+		for index in max_point_index:
+			top_dirs.append(directions[index[0]])
+		direction = random.choice(top_dirs)
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

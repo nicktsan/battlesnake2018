@@ -113,31 +113,32 @@ def move():
 		# got the food that we are closer than others, store it in list
 		coordinate.append([distance, x1, y1])	    #store distancea and coordinatea in list
 	coordinate = sorted(coordinate, key=lambda x: x[0])   	#sort all the coordinate base on distance
+	row = []
 	for row in coordinate:					#choose row 0 as the closest food
 		food_dist = row[0]
 		x1 = row[1]
 		y1 = row[2]
 	
 	#figure out which way to turn
-	#if (x1 > x2):       # if food is on right hand side
-	#	if (y1 > y2):    # if food is down-right
-	#		direction = 'down'
-	#	elif(y1 < y2):   # if food is up-right
-	#		direction = 'up'
-	#	else:
-	#		direction = 'right'
-	#elif (x1 < x2):      # food is on the left hand side
-	#	if (y1 > y2):    #food is down-left
-	#		direction = 'down'
-	#	elif(y1 < y2):   #food is up-left
-	#		direction = 'up'
-	#	else:
-	#		direction = 'left'
-	#else:
-	#	if (y1 > y2):    #food is directly below
-	#		direction = 'down'
-	#	else:            #food is directly above
-	#		direction = 'up'		
+	if (x1 > x2):       # if food is on right hand side
+		if (y1 > y2):    # if food is down-right
+			direction = 'down'
+		elif(y1 < y2):   # if food is up-right
+			direction = 'up'
+		else:
+			direction = 'right'
+	elif (x1 < x2):      # food is on the left hand side
+		if (y1 > y2):    #food is down-left
+			direction = 'down'
+		elif(y1 < y2):   #food is up-left
+			direction = 'up'
+		else:
+			direction = 'left'
+	else:
+		if (y1 > y2):    #food is directly below
+			direction = 'down'
+		else:            #food is directly above
+			direction = 'up'		
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

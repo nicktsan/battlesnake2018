@@ -119,31 +119,29 @@ def move():
 		y1 = row[2]
 	
 	#figure out which way to turn
-	if (x1 > x2):       # if food is on right hand side
-		if (y1 > y2):    # if food is down-right
-			direction = 'down'
-		elif(y1 < y2):   # if food is up-right
-			direction = 'up'
-		else:
-			direction = 'right'
-	elif (x1 < x2):      # food is on the left hand side
-		if (y1 > y2):    #food is down-left
-			direction = 'down'
-		elif(y1 < y2):   #food is up-left
-			direction = 'up'
-		else:
-			direction = 'left'
-	else:
-		if (y1 > y2):    #food is directly below
-			direction = 'down'
-		else:            #food is directly above
-			direction = 'up'		
+	#if (x1 > x2):       # if food is on right hand side
+	#	if (y1 > y2):    # if food is down-right
+	#		direction = 'down'
+	#	elif(y1 < y2):   # if food is up-right
+	#		direction = 'up'
+	#	else:
+	#		direction = 'right'
+	#elif (x1 < x2):      # food is on the left hand side
+	#	if (y1 > y2):    #food is down-left
+	#		direction = 'down'
+	#	elif(y1 < y2):   #food is up-left
+	#		direction = 'up'
+	#	else:
+	#		direction = 'left'
+	#else:
+	#	if (y1 > y2):    #food is directly below
+	#		direction = 'down'
+	#	else:            #food is directly above
+	#		direction = 'up'		
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'
 	}		
-#sfwefw
-
 	# Find the distance from us to food
 	# Find the distance from opponent to food
 	# If the opponent is closer then we pass

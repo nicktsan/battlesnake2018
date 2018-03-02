@@ -36,111 +36,6 @@ def find_slope(x1, y1, x2, y2):
 	return (float(rise)/float(run))*-1.0 #we need to multiply by -1 because y values become larger when you go down the board.
 	#returns a positive or negative float, which will be our slope.
 
-#Takes in the board and our snakes head location
-#Goes through each tile location 2 tiles away and checks
-#what is in it.
-#Throw in other fucntions depending on what is present
-def checkTwoTilesAway(board, x, y):
-	#checks for if the locations 2 tiles away are out of the board
-	rowMinus1 = False
-	rowMinus2 = False
-	rowPlus1 = False
-	rowPlus2 = False
-	colMinus1 = False
-	colMinus2 = False
-	colPlus1 = False
-	colPlus2 = False
-	if(x - 2 < 0):
-		rowMinus2 = True
-	if(x - 1 < 0):
-		rowMinus1 = True
-	if(y - 2 < 0):
-		colMinus2 = True
-	if(y - 1 < 0):
-		colMinus2 = True
-	if(x + 1 > len(board)):
-		rowPlus1 = True
-	if(x + 2 > len(board)):
-		rowPlus2 = True
-	if(y + 2 > len(board[0])):
-		colPlus2 = True
-	if(y + 1 > len(board[0])):
-		colPlus1 = True
-	#Goes through each location 2 tiles away and sets
-	#it's var to waht is at the board at that point
-	# x - 2 and y - 2
-	if(rowMinus2 and colMinus2):
-		atLocation = board[y - 2][x - 2]
-	# x - 2 and y - 1
-	if(rowMinus2 and colMinus1):
-		atLocation = board[y - 2][x - 1]
-	# x - 2 and y
-	if(rowMinus2):
-		atLocation = board[y - 2][x]
-	# x - 2 and y + 1
-	if(rowMinus2 and colPlus1):
-		atLocation = board[y - 2][x + 1]
-	# x - 2 and y + 2
-	if(rowMinus2 and colPlus2):
-		atLocation = board[y - 2][x + 2]		 
-	# x - 1 and y - 2
-	if(rowMinus1 and colMinus2):
-		atLocation = board[y - 1][x - 2]
-	# x - 1 and y - 1
-	if(rowMinus1 and colMinus1):
-		atLocation = board[y - 1][x - 1]
-	# x - 1 and y
-	if(rowMinus1):
-		atLocation = board[y - 1][x]
-	# x - 1 and y + 1
-	if(rowMinus1 and colPlus1):
-		atLocation = board[y - 1][x + 1]
-	# x - 1 and y + 2
-	if(rowMinus1 and colPlus2):
-		atLocation = board[y - 1][x + 2]
-	# x and y - 2
-	if(colMinus2):
-		atLocation = board[y][x - 2]
-	# x and y - 1
-	if(colMinus1):
-		atLocation = board[y][x - 1]
-	# x and y + 1
-	if(colPlus1):
-		atLocation = board[y][x + 1]
-	# x and y + 2
-	if(colPlus2):
-		atLocation = board[y][x + 2]
-	# x + 1 and y - 2
-	if(rowPlus1 and colMinus2):
-		atLocation = board[y + 1][x - 2]
-	# x + 1 and y - 1
-	if(rowPlus1 and colMinus1):
-		atLocation = board[y + 1][x - 1]
-	# x + 1 and y
-	if(rowPlus1):
-		atLocation = board[y + 1][x]
-	# x + 1 and y + 1
-	if(rowPlus1 and colPlus1):
-		atLocation = board[y + 1][x + 1]
-	# x + 1 and y + 2
-	if(rowPlus1 and colPlus2):
-		atLocation = board[y + 1][x + 2]
-	# x + 2 and y - 2
-	if(rowPlus2 and colMinus2):
-		atLocation = board[y + 2][x - 2]
-	# x + 2 and y - 1
-	if(rowPlus2 and colMinus1):
-		atLocation = board[y + 2][x - 1]
-	# x + 2 and y
-	if(rowPlus2):
-		atLocation = board[y + 2][x]
-	# x + 2 and y + 1
-	if(rowPlus2 and colPlus1):
-		atLocation = board[y + 2][x + 1]
-	# x + 2 and y + 2
-	if(rowPlus2 and colPlus2):
-		atLocation = board[y + 2][x + 2]
-
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.
 def check_left(x, y, board):
@@ -185,64 +80,19 @@ def calc_distance(x1, y1, x2, y2):
 #The path list begins with the starting node and ends in the goal node.
 def reconstruct_path(parent, current):
 	total_path = [current]
+	num_turns = 0
 	while current in parent.keys():
+		prev = current
 		current = parent[current]
+		#simple_grid[current[1]][current[0]] = 5
+		num_turns += calc_distance(prev[0], prev[1], current[0], current[1])
 		total_path.append(current)
-	return [list(reversed(total_path)), len(total_path)]
-
-#use this method to find a path from point A to point B. Returns None if there is no path.
-def a_star(start, goal, board):
-	#start and goal should be (x,y) objects
-	#to call this function: a_star((x0, y0), (x1, y1), board)
-	start = tuple(start)
-	goal = tuple(goal)
-	x0, y0 = start[0], start[1]
-	x1, y1 = goal[0], goal[1]
-
-	closed_set = []
-	open_set   = [start]
-	parent = {} #empty map
-
-	#g_score should be distance from starting point to another point (ex: a neighbour).
-	g_score = [[10000 for x in xrange(len(board[y]))] for y in xrange(len(board))]
-	#Obviously, the G score from the starting point to itself is 0.
-	g_score[y0, x0] = 0
-
-	f_score = [[10000 for x in xrange(len(board[y]))] for y in xrange(len(board))]
-	f_score[y0, x0] = calc_distance(x0, y0, x1, y1)
-
-	while(len(open_set) > 0):
-		current = min(open_set, key=lambda p: f_score[p[1]][p[0]])
-
-		if (current == goal):
-			return reconstruct_path(parent, goal)
-
-		open_set.remove(current)
-		closed_set.append(current)
-
-		neighbours = []
-		if (check_up(x0, y0, board) == False):
-			neighbours.append((x0, y0-1))
-		if (check_right(x0, y0, board) == False):
-			neighbours.append((x0+1, y0))
-		if (check_down(x0, y0, board) == False):
-			neighbours.append((x0, y0+1))
-		if (check_left(x0, y0, board) == False):
-			neighbours.append((x0-1, y0))
-
-		for neighbour in neighbours:
-			if neighbour in closed_set:
-				continue
-			tentative_g_score = g_score[current[1]][current[0]] + calc_distance(current[0], current[1] ,neighbour[0], neighbour[1])
-			if neighbour not in open_set:
-				open_set.append(neighbour)
-			elif tentative_g_score >= g_score[neighbour[1]][neighbour[0]]:
-				continue
-
-			parent[neighbour] = current
-			g_score[neighbour[1]][neighbour[0]] = tentative_g_score
-			f_score[neighbour[1]][neighbour[0]] = tentative_g_score + calc_distance(neighbour[0], neighbour[1], x1, y1)
-	return None
+	#simple_grid[total_path[0][1]][total_path[0][0]] = 5
+	"""
+	print "finished:"
+	print_grid()
+	"""
+	return [list(reversed(total_path)), num_turns]
 
 def norm_dir(cX, cY, pX, pY):
 	dX = int(math.copysign(1, cX - pX))
@@ -258,9 +108,13 @@ def find_neighbours(cX, cY, parent, board):
 	neighbours = [] # a list of tuples aka (x, y) object
 	
 	if type(parent) != tuple:
-		for i,j in [(-1,0),(0,-1),(1,0),(0,1),(-1,-1),(-1,1),(1,-1),(1,1)]:
+		for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
 			if (not is_obstacle(cX+i, cY+j, board)):
 				neighbours.append((cX+i, cY+j))
+		for i,j in [(-1,-1),(-1,1),(1,-1),(1,1)]:
+			if (not is_obstacle(cX+i, cY+j, board) and (not is_obstacle(cX+i, cY, board) or not is_obstacle(cX, cY+j, board))):
+				neighbours.append((cX+i, cY+j))
+
 		return neighbours
 	dX,dY = norm_dir(cX,cY,parent[0],parent[1])
 
@@ -368,24 +222,16 @@ def jump(cX, cY, dX, dY, goal, board):
 def find_successors(cX, cY, parent, goal, board):
 	successors = []
 	#find non-obstacle neighbours
-	print "current: (%i, %i)" % (cX, cY)
-	print "parent: "
-	print parent.get((cX, cY), 0)
+	# "current: (%i, %i)" % (cX, cY)
+	# "parent: "
+	# parent.get((cX, cY), 0)
 	neighbours = find_neighbours(cX, cY, parent.get((cX, cY), 0), board)
-	print "neighbours: "
-	print neighbours
-
 	for neighbour in neighbours:
 		dX = neighbour[0] - cX
 		dY = neighbour[1] - cY
-		
-		print "direction: (%i, %i)" % (dX, dY)
-
 		jumpPoint = jump(cX, cY, dX, dY, goal, board)
 		if jumpPoint:
 			successors.append(jumpPoint)
-			print "jumpPoint"
-			print jumpPoint
 	return successors #should return a list of (x, y) objects
 
 
@@ -412,9 +258,7 @@ def jps(start, goal, board):
 	heapq.heappush(pqueue, (fscore[start], start))
 	while(pqueue):
 		current = tuple(heapq.heappop(pqueue)[1])
-		simple_grid[current[1]][current[0]] = 3
-		print "updated simple grid"
-		print_grid()
+		#simple_grid[current[1]][current[0]] = 3
 		
 		if (current == goal):
 			return reconstruct_path(parent, goal)
@@ -428,7 +272,6 @@ def jps(start, goal, board):
 			if jumpPoint in closed_set:
 				continue
 			tentative_gscore = gscore[current] + calc_distance(current[0], current[1], jumpPoint[0], jumpPoint[1])
-			print "tentative_gscore: %i" % tentative_gscore
 			if (tentative_gscore < gscore.get(jumpPoint, 0) or jumpPoint not in [j[1] for j in pqueue]):
 				parent[jumpPoint] = current
 				gscore[jumpPoint] = tentative_gscore
@@ -436,13 +279,13 @@ def jps(start, goal, board):
 				heapq.heappush(pqueue, (fscore[jumpPoint], jumpPoint))
 
 	return None
-
+"""
 def print_grid():
 	for row in simple_grid:
 		for e in row:
 			print e,
 		print
-"""
+
 food_spawn= {'data': 
 			[
 				{
@@ -461,7 +304,7 @@ snake_spawn= {
 		  "data": [
 			{
 			  "object": "point",
-			  "x": 1,
+			  "x": 0,
 			  "y": 8
 			},
 			{
@@ -472,6 +315,11 @@ snake_spawn= {
 			{
 			  "object": "point",
 			  "x": 1,
+			  "y": 10
+			},
+						{
+			  "object": "point",
+			  "x": 2,
 			  "y": 10
 			}
 		  ],
@@ -511,10 +359,34 @@ snake_spawn= {
 		"name": "Typescript Snake",
 		"object": "snake",
 		"taunt": ""
+	  },
+	  {
+		"body": {
+		  "data": [
+			{
+			  "object": "point",
+			  "x": 0,
+			  "y": 1
+			},
+			{
+			  "object": "point",
+			  "x": 1,
+			  "y": 0
+			},
+		  ],
+		  "object": "list"
+		},
+		"health": 100,
+		"id": "48ca23a2-dde8-4d0p-b03a-61cc9780427e",
+		"length": 3,
+		"name": "Omae wa Snake",
+		"object": "snake",
+		"taunt": ""
 	  }
 	],
 	"object": "list"
   }
+
 grid = init_board(food_spawn, snake_spawn, 20, 20)
 
 simple_grid = np.zeros((20, 20), dtype=int)
@@ -525,10 +397,12 @@ for h in range(0, 20):
 		if (grid[h][w] != 'food' and grid[h][w] != 0):
 			simple_grid[h][w] = 1
 
-simple_grid[9][19] = 3
+begin = (0, 0)
+dest = (0, 9)
+simple_grid[begin[1]][begin[0]] = 3
 
-#print_grid()
-print 
+print "starting grid: "
+print_grid()
 
-print jps((19, 9), (0, 9), grid)
+print jps(begin, dest, grid)
 """

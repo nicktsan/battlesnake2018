@@ -113,22 +113,7 @@ def move():
 		"""
 		coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake)
 
-		is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
-		is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
-		is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
-		is_down = check_down(mysnake_head['x'], mysnake_head['y'], board)
-	
-		# TODO: Do things with data
-		if (is_up == True):
-			directions.remove('up')
-		if (is_down == True):
-			directions.remove('down')
-		if (is_left == True):
-			directions.remove('left')
-		if (is_right == True):
-			directions.remove('right')
-		direction = random.choice(directions)
-
+		
 		counter = 0
 		for line in coordinate:
 			row = coordinate[counter]

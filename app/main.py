@@ -63,7 +63,7 @@ def move():
 	board_width = data.get('width')
 	board_height = data.get('height')
 	mysnake = data['you']
-	snake_list = data['snakes']['data']
+	snake_list = data['snakes']
 	food_list = data['food'] #use food_list['data'][int]['x'] to get the 'x' point of food at index int in the food list
 	directions = ['up', 'down', 'left', 'right']
 	mysnake_head = mysnake['body']['data'][0] #should get the head's point
@@ -84,7 +84,7 @@ def move():
 		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
 		# get the coordinate of all other snakes
 		
-		#for other_snake in snake_list['data']:
+		for other_snake in snake_list['data']:
 			if (other_snake['id'] != mysnake['id']):
 				#othersnake_head = othersnake['data']['body']['data'][0]
 				#x3 = othersnake_head['x']

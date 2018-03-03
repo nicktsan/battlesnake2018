@@ -83,7 +83,7 @@ def move():
 		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
 		# get the coordinate of all other snakes
 		for other_snake in snake_list['data']:
-			if (snake_list['id'] == mysnake['id']):
+			if (other_snake['id'] == mysnake['id']):
 				continue
 			else:
 				othersnake_head = othersnake['body']['data'][0]
@@ -95,7 +95,7 @@ def move():
 				elif (distance > other_distance):
 					food_ok += 1
 				else:
-					other_length = othersnake['length']
+					other_length = other_snake['length']
 					our_length = mysnake['length']
 					if (other_length > our_length):
 						food_ok += 1

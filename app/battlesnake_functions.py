@@ -80,7 +80,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 	x1 = row[1]
 	y1 = row[2]
 	"""
-	return (coordinate)
+	return coordinate
 
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.

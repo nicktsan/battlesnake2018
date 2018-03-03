@@ -65,7 +65,7 @@ def move():
 	mysnake = data['you']
 	snake_list = data['snakes']
 	food_list = data['food'] #use food_list['data'][int]['x'] to get the 'x' point of food at index int in the food list
-	directions = ['up', 'down', 'left', 'right']
+	#directions = ['up', 'down', 'left', 'right']
 	mysnake_head = mysnake['body']['data'][0] #should get the head's point
 	mysnake_neck = mysnake['body']['data'][1] #should get the neck's point
 

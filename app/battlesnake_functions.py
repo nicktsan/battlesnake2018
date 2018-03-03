@@ -36,7 +36,8 @@ def find_slope(x1, y1, x2, y2):
 	return (float(rise)/float(run))*-1.0 #we need to multiply by -1 because y values become larger when you go down the board.
 	#returns a positive or negative float, which will be our slope.
 
-def seek_food(mysnake_head, food_list, snake_list, mysnake, othersnake_tail):
+#def seek_food(mysnake_head, food_list, snake_list, mysnake, othersnake_tail):
+def seek_food(mysnake_head,othersnake_tail):
 	x2 = mysnake_head['x']
 	y2 = mysnake_head['y']
 	coordinate = []

@@ -112,9 +112,9 @@ def move():
 		coordinate.append([distance, x1, y1])	    #store distancea and coordinatea in list
 	coordinate = sorted(coordinate, key=lambda x: x[0])   	#sort all the coordinate base on distance
 	row = coordinate[0]				#choose row 0 as the closest food
-		food_dist = row[0]
-		x1 = row[1]
-		y1 = row[2]
+	food_dist = row[0]
+	x1 = row[1]
+	y1 = row[2]
 	
 	#figure out which way to turn
 	if (x1 > x2):       # if food is on right hand side

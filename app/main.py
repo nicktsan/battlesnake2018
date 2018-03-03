@@ -75,6 +75,7 @@ def move():
 	y2 = mysnake_head['y']
 	coordinate = []
 	
+	
 	for food in food_list['data']:    # Find a food
 		x1 = food['x']
 		y1 = food['y']
@@ -92,6 +93,7 @@ def move():
 					continue
 				elif (distance > other_distance):
 					food_ok = False
+					"""
 				else:
 					other_length = other_snake['length']
 					our_length = mysnake['length']
@@ -101,6 +103,7 @@ def move():
 						continue
 					else:
 						food_ok = False
+						"""
 		if (food_ok == True):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
 				

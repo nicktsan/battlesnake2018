@@ -111,7 +111,7 @@ def move():
 		# got the food that we are closer than others, store it in list
 		coordinate.append([distance, x1, y1])	    #store distancea and coordinatea in list
 	coordinate = sorted(coordinate, key=lambda x: x[0])   	#sort all the coordinate base on distance
-	for row in coordinate:					#choose row 0 as the closest food
+	row = coordinate[0]				#choose row 0 as the closest food
 		food_dist = row[0]
 		x1 = row[1]
 		y1 = row[2]

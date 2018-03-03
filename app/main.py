@@ -47,31 +47,13 @@ def start():
 	# TODO: Do things with data
 
 	return {
-		'color': '#ffaa00',
-		'taunt': '{} ({}x{})'.format(game_id, board_width, board_height),
+		'color': '#FF0000',
+		'taunt': 'dat is not de wae',
 		'head_url': head_url,
 		'name': 'nicksnek',
 		'head_type': 'fang',
 		'tail_type': 'block-bum'
 	}
-    # Board Layout of a 6x6 board
-    # --------------------------------
-    # |(0,0)                    (5,0)|
-    # |(0,1)                    (5,1)|
-    # |                              |
-    # |                              |
-    # |                              |
-    # |(0,5)                    (5,5)|
-    # --------------------------------
-
-	# Strategy:
-    # Run in circles in the center of the board until HP runs to the threshold minimum. (Chase own tail)
-    # *Calculate the distance from the snake to the food by using the formula (dy2-dy1)/(dx2-dx1)   Dy2,Dx2 is the food and Dy1,Dx1 is the snake head
-    # Calculate other snake's distance to the food using the same above formula
-    # Find out if a block is in the way in the next tile
-    # Go for the food
-    # Repeat * again until get the food
-    # Return to center of the board
 
 
 @bottle.post('/move')
@@ -86,87 +68,45 @@ def move():
 	directions = ['up', 'down', 'left', 'right']
 	mysnake_head = mysnake['body']['data'][0] #should get the head's point
 	mysnake_neck = mysnake['body']['data'][1] #should get the neck's point
+
+	board = init_board(food_list, snake_list, board_width, board_height)
 	
-	above_headx, above_heady = get_up(mysnake_head)
-	directions = ['up', 'down', 'left', 'right']
-	direction = 'up'
-	#direction = random.choice(directions)
-
-	#Find our head location
-	x2 = mysnake_head['x'],
-	y2 = mysnake_head['y']
-	coordinate = []
-	for food in food_list['data']:    # Find a food
-		x1 = food['x'],
-		y1 = food['y']
-		# check all obstacles in between (call function)
-		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
-		# get the coordinate of all other snakes
-		# call obstacles in between function
-		# call calc_distance function
-
-		#compare our distance with their distance
-		# if they are closer, abandon the food, find next food and go through the same process 
-
-		# got the food that we are closer than others, store it in list
-		coordinate.append([distance, x1, y1])	    #store distancea and coordinatea in list
-	coordinate = sorted(coordinate, key=lambda x: x[0])   	#sort all the coordinate base on distance
-	row = coordinate[0]				#choose row 0 as the closest food
-	food_dist = row[0]
-	x1 = row[1]
-	y1 = row[2]
+	is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
+	is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
+	is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
+	is_down = check_down(mysnake_head['x'], mysnake_head['y'], board)
 	
-	#figure out which way to turn
-	if (x1 > x2):       # if food is on right hand side
-		if (y1 > y2):    # if food is down-right
-			direction = 'down'
-		elif(y1 < y2):   # if food is up-right
-			direction = 'up'
-		else:
-			direction = 'right'
-	elif (x1 < x2):      # food is on the left hand side
-		if (y1 > y2):    #food is down-left
-			direction = 'down'
-		elif(y1 < y2):   #food is up-left
-			direction = 'up'
-		else:
-			direction = 'left'
-	else:
-		if (y1 > y2):    #food is directly below
-			direction = 'down'
-		else:            #food is directly above
-			direction = 'up'		
+	# TODO: Do things with data
+	if (is_up == True):
+		directions.remove('up')
+	if (is_down == True):
+		directions.remove('down')
+	if (is_left == True):
+		directions.remove('left')
+	if (is_right == True):
+		directions.remove('right')
+	direction = random.choice(directions)
+
+	#We only need to do advanced decision making if there is more than 1 viable choice that will not kill the snake.
+	if (len(directions) > 1):
+		#make a points list for the length of remaining viable directions.
+		points = np.zeros(len(directions)) #np.zeros(x) creates an array of zeros of length x.
+		
+		#TODO assign points to corresponding choices
+
+
+
+		#calculate which remaining option has the most points
+		max_point_index = np.argwhere(points == np.amax(points))
+		top_dirs = []
+		#create a list of indeces of highest points.
+		for index in max_point_index:
+			top_dirs.append(directions[index[0]])
+		direction = random.choice(top_dirs)
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'
-	}		
-	# Find the distance from us to food
-	# Find the distance from opponent to food
-	# If the opponent is closer then we pass
-	# If we are closer then find the next food and compare
-
-	#if (mysnake_head['y'] == 0 and mysnake_head['x'] == 0):   #top left
-	#	direction = 'down'
-	#elif (mysnake_head['y'] == board_height-1 and mysnake_head['x'] == board_width-1):   #bottom right
-	#	direction = 'up'
-	#elif (mysnake_head['y'] == 0 and mysnake_head['x'] == board_width-1 ):    #top right
-	#	direction = 'left'
-	#elif (mysnake_head['y'] == board_height-1 and mysnake_head['x'] == 0):   #bottom left
-	#	direction = 'right'
-	#elif (mysnake_head['y'] == 0):   #top
-	#	direction = 'left'
-	#elif (mysnake_head['x'] == 0):   #left
-	#	direction = 'down'
-	#elif (mysnake_headp['y'] == board_height-1):    #bottom
-	#	direction = 'right'
-	#elif (mysnake_head['x'] == board_width-1):     #right
-	#	direction = 'up'
-	#return {
-	#	'move': direction,
-	#	'taunt': 'dat is not de wae'
-	#}
-
-
+	}
 
 
 # Expose WSGI app (so gunicorn can find it)
@@ -178,5 +118,3 @@ if __name__ == '__main__':
 		host=os.getenv('IP', '0.0.0.0'),
 		port=os.getenv('PORT', '8080'),
 debug = True)
-
-food = board[y][x] 

@@ -36,6 +36,49 @@ def find_slope(x1, y1, x2, y2):
 	return (float(rise)/float(run))*-1.0 #we need to multiply by -1 because y values become larger when you go down the board.
 	#returns a positive or negative float, which will be our slope.
 
+def seek_food(mysnake_head, food_list, snake_list, mysnake):
+	x2 = mysnake_head['x']
+	y2 = mysnake_head['y']
+	coordinate = []
+	
+	for food in food_list['data']:    # Find a food
+		x1 = food['x']
+		y1 = food['y']
+		food_ok = True
+		# check all obstacles in between (call function)
+		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
+		# get the coordinate of all other snakes
+		
+		for other_snake in snake_list['data']:
+			if (other_snake['id'] != mysnake['id']):
+				othersnake_head = other_snake['body']['data'][0]
+				x3 = othersnake_head['x']
+				y3 = othersnake_head['y']
+				other_distance = calc_distance(x1,y1,x3,y3)
+				if (distance < other_distance):
+					continue
+				elif (distance > other_distance):
+					food_ok = False
+				else:
+					other_length = other_snake['length']
+					our_length = mysnake['length']
+					if (other_length > our_length):
+						food_ok = False
+					elif (our_length > other_length):
+						continue
+					else:
+						food_ok = False
+			
+		if (food_ok == True):
+			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
+	   
+	coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
+	row = coordinate[0]             #choose row 0 as the closest food
+	food_dist = row[0]
+	x1 = row[1]
+	y1 = row[2]
+	return (x1,y1)
+
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.
 def check_left(x, y, board):

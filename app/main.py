@@ -71,6 +71,7 @@ def move():
 
 	board = init_board(food_list, snake_list, board_width, board_height)
 	
+	"""
 	x2 = mysnake_head['x']
 	y2 = mysnake_head['y']
 	coordinate = []
@@ -121,7 +122,9 @@ def move():
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
-	#
+	"""
+	x1,y1 = seek_food(mysnake_head, food_list, snake_list, mysnake)
+
 	#figure out which way to turn
 	if (x1 > x2):       # if food is on right hand side
 		if (y1 > y2):    # if food is down-right
@@ -174,6 +177,7 @@ def move():
 	#   for index in max_point_index:
 	#       top_dirs.append(directions[index[0]])
 	#   direction = random.choice(top_dirs)
+
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

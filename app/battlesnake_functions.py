@@ -59,18 +59,16 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 					continue
 				elif (distance > other_distance):
 					food_ok = False
-					break
+					
 				else:
 					other_length = other_snake['length']
 					our_length = mysnake['length']
 					if (other_length > our_length):
 						food_ok = False
-						break
 					elif (our_length > other_length):
 						continue
 					else:
 						food_ok = False
-						break
 		
 		if (food_ok == True):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list

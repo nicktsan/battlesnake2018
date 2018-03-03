@@ -93,16 +93,16 @@ def move():
 				if (distance < other_distance):
 					pass
 				elif (distance > other_distance):
-					food_ok + 1
+					food_ok += 1
 				else:
 					other_length = othersnake['length']
 					our_length = mysnake['length']
 					if (other_length > our_length):
-						food_ok + 1
+						food_ok += 1
 					elif (our_length > other_length):
 						pass
 					else:
-						food_ok + 1
+						food_ok += 1
 		if (food_ok == 0):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
 				

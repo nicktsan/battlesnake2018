@@ -73,13 +73,15 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 		if (food_ok == True):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
 	   
-	coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
+	
 
 	if not coordinate:
 		othersnake_tail = other_snake['body']['data'][-1]
 		x1 = othersnake_tail['x']
 		y1 = othersnake_tail['y']
 		coordinate = [0,x1,y1]
+	else:
+		coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
 	"""
 	row = coordinate[0]             #choose row 0 as the closest food
 	food_dist = row[0]

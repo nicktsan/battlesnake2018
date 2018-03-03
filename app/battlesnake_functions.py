@@ -50,6 +50,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 		# get the coordinate of all other snakes
 		
 		for other_snake in snake_list['data']:
+			"""
 			if (other_snake['id'] != mysnake['id']): 
 				othersnake_head = other_snake['body']['data'][0]
 				x3 = othersnake_head['x']
@@ -76,13 +77,15 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 	
 
 	if not coordinate:
-		othersnake_tail = other_snake['body']['data'][-1]
-		x1 = othersnake_tail['x']
-		y1 = othersnake_tail['y']
-		coordinate = [0,x1,y1]
+		"""
+	othersnake_tail = other_snake['body']['data'][-1]
+	x1 = othersnake_tail['x']
+	y1 = othersnake_tail['y']
+	coordinate = [0,x1,y1]
+	"""
 	else:
 		coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
-	"""
+	
 	row = coordinate[0]             #choose row 0 as the closest food
 	food_dist = row[0]
 	x1 = row[1]

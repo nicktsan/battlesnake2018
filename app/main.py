@@ -123,8 +123,12 @@ def move():
 	x1 = row[1]
 	y1 = row[2]
 	"""
-	x1,y1,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake)
+	coordinate = seek_food(mysnake_head, food_list, snake_list, mysnake)
 
+	row = coordinate[0]             #choose row 0 as the closest food
+	food_dist = row[0]
+	x1 = row[1]
+	y1 = row[2]
 	#figure out which way to turn
 	if (x1 > x2):       # if food is on right hand side
 		if (y1 > y2):    # if food is down-right

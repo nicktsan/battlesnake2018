@@ -74,11 +74,13 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
 	   
 	coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
+	"""
 	row = coordinate[0]             #choose row 0 as the closest food
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
-	return (x1,y1,x2,y2)
+	"""
+	return (coordinate)
 
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.

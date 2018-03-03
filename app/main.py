@@ -147,7 +147,6 @@ def move():
 				directions.remove('right')
 			if (is_up == True):
 				directions.remove('up')
-			direction = direction[0]
 		elif(y1 < y2):   # if food is up-right
 			directions = ['up', 'right', 'down', 'left']
 			if (is_up == True):
@@ -156,7 +155,6 @@ def move():
 				directions.remove('right')
 			if (is_down == True):
 				directions.remove('down')
-			direction = direction[0]
 		else:
 			directions = ['right', 'up', 'down', 'left']
 			if (is_right == True):
@@ -165,7 +163,6 @@ def move():
 				directions.remove('up')
 			if (is_down == True):
 				directions.remove('down')
-			direction = direction[0]
 	elif (x1 < x2):      # food is on the left hand side
 		if (y1 > y2):    #food is down-left
 			directions = ['down', 'left', 'up', 'right']
@@ -175,7 +172,6 @@ def move():
 				directions.remove('left')
 			if (is_up == True):
 				directions.remove('up')
-			direction = direction[0]
 		elif(y1 < y2):   #food is up-left
 			directions = ['up', 'left', 'down', 'right']
 			if (is_up == True):
@@ -184,7 +180,6 @@ def move():
 				directions.remove('left')
 			if (is_down == True):
 				directions.remove('down')
-			direction = direction[0]
 		else:
 			directions = ['left', 'up', 'down', 'right']
 			if (is_left == True):
@@ -193,7 +188,6 @@ def move():
 				directions.remove('up')
 			if (is_down == True):
 				directions.remove('down')
-			direction = direction[0]
 	else:
 		if (y1 > y2):    #food is directly below
 			directions = ['down', 'up', 'left', 'right']
@@ -203,7 +197,6 @@ def move():
 				directions.remove('up')
 			if (is_left == True):
 				directions.remove('left')
-			direction = direction[0]
 		else:            #food is directly above
 			directions = ['up', 'left', 'right', 'up']
 			if (is_up == True):
@@ -212,8 +205,7 @@ def move():
 				directions.remove('left')
 			if (is_down == True):
 				directions.remove('down')
-			direction = direction[0]
-	
+	direction = directions[0]
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

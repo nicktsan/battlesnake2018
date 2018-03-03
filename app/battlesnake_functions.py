@@ -2,8 +2,8 @@ import heapq
 import numpy as np
 import math
 #create a board and fill it with food, snakes, and our snake
-def init_board(food_list, snake_list, width, height):
-	#initialize a 2d list of 0's with width columns and height rows.
+def init_board(food_list, snake_list, width, height, myhead):
+	#initialize a 2d list of 0's with width number of columns and height number of rows.
 	board = [([0] * width) for row in xrange(height)]
 	#fill in food locations
 	for food in food_list['data']:
@@ -16,6 +16,42 @@ def init_board(food_list, snake_list, width, height):
 			x = snake['body']['data'][index]['x']
 			y = snake['body']['data'][index]['y']
 			board[y][x] = [snake['id'], index]
+
+	#check for dead-ends, starting with our head. Dead ends are any space
+	#with three orthogonal obstacles.
+	"""
+	free = []
+	visited = []
+	for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
+		#start with our snake head
+		if (not is_obstacle(myhead['x']+i, myhead['y']+j, board)):
+			free.append((myhead['x']+i, myhead['y']+j))
+	while len(free) == 1:
+		cX, cY = free[0][0], free[0][1]
+		visited.append([cX, cY])
+		del free[:]
+		for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
+			if (not is_obstacle(cX+i, cY+j, board)):
+				free.append((cX+i, cY+j))
+	for x in range(0, width):
+		for y in range(0, height):
+			del free[:]
+			if (not is_obstacle(x, y, board) and [x, y] not in visited):
+				for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
+					if (not is_obstacle(x+i, y+j, board)):
+						free.append((x+i, y+j))
+				visited.append([x, y])
+				if len(free) == 1:
+					board[y][x] = 'dead end'
+				while len(free) == 1:
+					cX, cY = free[0][0], free[0][1]
+					visited.append([x, y])
+					board[cY][cX] = 'dead end'
+					del free[:]
+					for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
+						if (not is_obstacle(cX+i, cY+j, board)):
+							free.append((cX+i, cY+j))
+	"""
 	return board
 
 #to refer an x,y point on the board, type it as board[y][x]
@@ -80,7 +116,116 @@ def calc_distance(x1, y1, x2, y2):
 	total_distance = abs(horizontal_distance) + abs(vertical_distance)
 	return total_distance
 
-#returns the shortest path from point A to point B in a_star. Returns a list containing a list and the length of the path.
+#returns true if the position is a snake head
+def checkIfSnakeHead(boardLocation):
+	if isinstance(boardLocation, list):
+		if (boardLocation[1] == 0):
+			return True
+	return False
+
+def ifSnakeisBiggerAtLocation(boardLocation, mylength, snake_list):
+	#boardLocation is what is in board[y][x]
+	for snake in snake_list['data']:
+		if(snake['id'] == boardLocation[0]):
+			snakelength = snake['length']
+			break
+	#if your snake is larger, return true. Otherwise, return false.
+	if(mylength > snakelength):
+		return True
+	return False
+
+#Takes in the board and our snakes head location
+#Goes through each tile location 2 tiles away and checks
+#what is in it.
+#Throw in other fucntions depending on what is present
+def checkOneTileAway(board, x, y, mylength, snake_list):
+	#checks for if the locations 2 tiles away are out of the board
+	#records how many obstacles there is in our next move
+	numberObstacles = 0
+	#Goes through each location 2 tiles away and sets
+	#it's var to what is at the board at that point
+	# x-1 and y
+	if(x - 1 >= 0):
+		atLocation = board[y][x - 1]
+		if checkIfSnakeHead(atLocation):
+			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
+				numberObstacles += 1
+		elif (is_obstacle(x-1, y, board)):
+				numberObstacles = numberObstacles + 1
+	#x and y - 1
+	if(y - 1 >= 0):
+		atLocation = board[y-1][x]
+		if checkIfSnakeHead(atLocation):
+			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
+				numberObstacles += 1
+		elif(is_obstacle(x, y - 1, board)):
+				numberObstacles = numberObstacles + 1
+	# x and y+1
+	if(y + 1 < len(board)):
+		atLocation = board[y + 1][x]
+		if checkIfSnakeHead(atLocation):
+			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
+				numberObstacles += 1
+		elif(is_obstacle(x, y + 1, board)):
+				numberObstacles = numberObstacles + 1
+	# x + 1 and y
+	if(x + 1 < len(board[0])):
+		atLocation = board[y][x + 1]
+		if checkIfSnakeHead(atLocation):
+			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
+				numberObstacles += 1
+		elif(is_obstacle(x + 1, y, board)):
+				numberObstacles = numberObstacles + 1
+	#Check if the next turn is a trap
+	return numberObstacles
+
+
+def seek_food(mysnake_head, food_list, snake_list, mysnake):
+	x2 = mysnake_head['x']
+	y2 = mysnake_head['y']
+	coordinate = []
+	
+	for food in food_list['data']:    # Find a food
+		x1 = food['x']
+		y1 = food['y']
+		food_ok = True
+		# check all obstacles in between (call function)
+		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
+		# get the coordinate of all other snakes
+		
+		for other_snake in snake_list['data']:
+			if (other_snake['id'] != mysnake['id']): 
+				othersnake_head = other_snake['body']['data'][0]
+				x3 = othersnake_head['x']
+				y3 = othersnake_head['y']
+				other_distance = calc_distance(x1,y1,x3,y3)
+				if (distance < other_distance):
+					continue
+				elif (distance > other_distance):
+					food_ok = False
+				else:
+					other_length = other_snake['length']
+					our_length = mysnake['length']
+					if (other_length >= our_length):
+						food_ok = False
+					elif (our_length > other_length):
+						continue
+		
+		if (food_ok == True):
+			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
+	   
+	if not coordinate:
+		for other_snake in snake_list['data']:
+			#if (other_snake['id'] == mysnake['id']): 
+			othersnake_tail = other_snake['body']['data'][-1]
+			x3 = othersnake_tail['x']
+			y3 = othersnake_tail['y']
+			coordinate.append([distance, x3, y3])
+	else:		
+		coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
+	return coordinate
+
+
 #The path list begins with the starting node and ends in the goal node.
 def reconstruct_path(parent, current):
 	total_path = [current]
@@ -257,10 +402,6 @@ def jps(start, goal, board):
 	goal = tuple(goal)
 	x0, y0 = start[0], start[1]
 	x1, y1 = goal[0], goal[1]
-
-	#if (is_obstacle(x1, y1, board)):
-	#	return None
-
 	closed_set = set()
 	parent = {} #empty map
 	gscore = {start:0}
@@ -293,14 +434,14 @@ def jps(start, goal, board):
 				heapq.heappush(pqueue, (fscore[jumpPoint], jumpPoint))
 
 	return None
-
+"""
 def print_grid():
 	for row in simple_grid:
 		for e in row:
 			print e,
 		print
 		
-"""
+
 
 food_spawn= {'data': 
 			[
@@ -343,7 +484,78 @@ snake_spawn= {
 		},
 		"health": 100,
 		"id": "58a0142f-4cd7-4d35-9b17-815ec8ff8e70",
-		"length": 3,
+		"length": 4,
+		"name": "Sonic Snake",
+		"object": "snake",
+		"taunt": "Gotta go fast"
+	  },
+	  {
+		"body": {
+		  "data": [
+			{
+			  "object": "point",
+			  "x": 4,
+			  "y": 8
+			},
+			{
+			  "object": "point",
+			  "x": 3,
+			  "y": 8
+			},
+			{
+			  "object": "point",
+			  "x": 3,
+			  "y": 9
+			},
+			{
+			  "object": "point",
+			  "x": 3,
+			  "y": 10
+			},
+						{
+			  "object": "point",
+			  "x": 3,
+			  "y": 11
+			}
+		  ],
+		  "object": "list"
+		},
+		"health": 100,
+		"id": "58a0142f-4cd7-4d35-9b17-815ec8ff8e70",
+		"length": 4,
+		"name": "Sonic Snake",
+		"object": "snake",
+		"taunt": "Gotta go fast"
+	  },
+	  {
+		"body": {
+		  "data": [
+			{
+			  "object": "point",
+			  "x": 5,
+			  "y": 8
+			},
+			{
+			  "object": "point",
+			  "x": 5,
+			  "y": 9
+			},
+			{
+			  "object": "point",
+			  "x": 5,
+			  "y": 10
+			},
+						{
+			  "object": "point",
+			  "x": 5,
+			  "y": 11
+			}
+		  ],
+		  "object": "list"
+		},
+		"health": 100,
+		"id": "58a0142f-4cd7-4d35-9b17-815ec8ff8e70",
+		"length": 4,
 		"name": "Sonic Snake",
 		"object": "snake",
 		"taunt": "Gotta go fast"
@@ -379,8 +591,8 @@ snake_spawn= {
 	],
 	"object": "list"
   }
-
-grid = init_board(food_spawn, snake_spawn, 20, 20)
+myhead = {'x':15, 'y':13}
+grid = init_board(food_spawn, snake_spawn, 20, 20, myhead)
 
 simple_grid = np.zeros((20, 20), dtype=int)
 for h in range(0, 20):
@@ -389,6 +601,8 @@ for h in range(0, 20):
 			simple_grid[h][w] = 2
 		if (grid[h][w] != 'food' and grid[h][w] != 0):
 			simple_grid[h][w] = 1
+		if grid[h][w] == 'dead end':
+			simple_grid[h][w] = 9
 
 begin = (15, 13)
 dest = (15, 18)

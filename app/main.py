@@ -67,6 +67,7 @@ def move():
 	food_list = data['food'] #use food_list['data'][int]['x'] to get the 'x' point of food at index int in the food list
 	directions = ['up', 'down', 'left', 'right']
 	mysnake_head = mysnake['body']['data'][0] #should get the head's point
+	mysnake_neck = mysnake['body']['data'][1] #should get the neck's point
 
 	board = init_board(food_list, snake_list, board_width, board_height)
 	
@@ -75,10 +76,6 @@ def move():
 	is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
 	is_down = check_down(mysnake_head['x'], mysnake_head['y'], board)
 	
-	#testing calc_distance
-	#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
-	#test_distance = calc_distance(mysnake_head['x'], mysnake_head['y'], 2, 3)
-	test_between = check_between(board, mysnake_head['x'], mysnake_head['y'], food_list['data'][0]['x'], food_list['data'][0]['y'])
 	# TODO: Do things with data
 	if (is_up == True):
 		directions.remove('up')
@@ -88,8 +85,71 @@ def move():
 		directions.remove('left')
 	if (is_right == True):
 		directions.remove('right')
-	
 	direction = random.choice(directions)
+
+	#We only need to do advanced decision making if there is more than 1 viable choice that will not kill the snake.
+	if (len(directions) > 1):
+		#make a points list for the length of remaining viable directions.
+		points = np.zeros(len(directions)) #np.zeros(x) creates an array of zeros of length x.
+		jumpPoints = 0 #insertjumpPoint algorithm here
+		nextJumpPoint = jumpPoints[0][0]
+		#stores the recommendations
+		recommendations = []
+		relativeY = nextJumpPoint[1] - mysnake_head['y']
+		relativeX= nextJumpPoint[0] - mysnake_head['x']
+		#if our point is above or below
+		if(nextJumpPoint[0] == 0):
+			#down
+			if(relativeY >= 1):
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'], mysnake_head['y'] + 1, "down"))
+			#up
+			else if(relativeY <= -1):
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'], mysnake_head['y'] - 1, "up"))
+		#if our point is left or right
+		else if(nextJumpPoint[1] == 0):
+			#right
+			if(relativeX >= 1):
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'] + 1, mysnake_head['y'], "right"))
+			#left
+			else if(relativeX <= -1):
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'] - 1, mysnake_head['y'], "left"))
+		#else we have 2 directions
+		else
+			#check Quadrant 1
+			if(relativeX >= 1 and relativeY >= 1):
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'] + 1, mysnake_head['y'], "right"))
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'], mysnake_head['y'] + 1, "up"))
+			#check Quadrant 4
+			else if(relativeX >= 1 and relativeY <= -1)
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'] + 1, mysnake_head['y'], "right"))
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'], mysnake_head['y'] - 1, "down"))
+			#check Quadrant 2
+			else if(relativeX <= -1 and relativeY >= 1)
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'] - 1, mysnake_head['y'], "left"))
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'], mysnake_head['y'] + 1, "up"))
+			else if(relativeX <= -1 and relativeY >= 1)
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'] - 1, mysnake_head['y'], "left"))
+				recommendations.append(checkOneTileAway(board, mysnake_head['x'], mysnake_head['y'] - 1, "down"))
+		#goes through each item in recommendations
+		recommendationsIndex = 0
+		goodDirections = []
+		while(i < len(recommendations)):
+			if(recommendations[i][1] == True):
+				goodDirections.append(recommendations[i][0])
+			recommendationsIndex = recommendationsIndex + 1
+		#decides on direction
+		if(len(goodDirections) > 1):
+			direction = random.choice(goodDirections)
+		else
+			direction = goodDirections
+
+		#calculate which remaining option has the most points
+		#max_point_index = np.argwhere(points == np.amax(points))
+		#top_dirs = []
+		#create a list of indeces of highest points.
+		#for index in max_point_index:
+		#	top_dirs.append(directions[index[0]])
+		#direction = random.choice(top_dirs)
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

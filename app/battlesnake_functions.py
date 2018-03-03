@@ -31,96 +31,109 @@ def find_slope(x1, y1, x2, y2):
 	return (float(rise)/float(run))*-1.0 #we need to multiply by -1 because y values become larger when you go down the grid.
 	#returns a positive or negative float, which will be our slope.
 
-#returns true if the position is a snake head that is 
-#connected to a smaller body than ours
+#returns true if the position is a snake head
 def checkIfSnakeHead(boardLocation):
 	if(isinstance(boardLocation, list):
 		if(boardLocation[1] == 0):
 			snakelength = 0
-			for snake in snake_list['data']:
-				if(snake['id'] == boardLocation[0]):
-					snakelength = snake['length']
-			if(mysnake[length] > snakelength):
-				return True
-			#else
-			return False
+			return true
+		else 
+			return false
+
+#returns true if the position is a snake head that is 
+#connected to a smaller body than ours
+def ifSnakeisBiggerAtLocation(boardLocation)
+	for snake in snake_list['data']:
+		if(snake['id'] == boardLocation[0]):
+			snakelength = snake['length']
+	if(mysnake[length] > snakelength):
+		return True
+	else
+		return False
 
 #Takes in the board and our snakes head location
 #Goes through each tile location 2 tiles away and checks
 #what is in it.
 #Throw in other fucntions depending on what is present
-def checkTwoTilesAway(board, x, y):
+def checkOneTileAway(board, x, y, direction):
 	#checks for if the locations 2 tiles away are out of the board
+	recommendations = []
+	recommendations.append(direction)
+	#records how many obstacles there is in our next move
+	numberObstacles = 0
 	rowMinus1 = False
-	rowMinus2 = False
 	rowPlus1 = False
-	rowPlus2 = False
 	colMinus1 = False
-	colMinus2 = False
 	colPlus1 = False
-	colPlus2 = False
-	if(x - 2 < 0):
-		rowMinus2 = True
 	if(x - 1 < 0):
 		rowMinus1 = True
-	if(y - 2 < 0):
-		colMinus2 = True
 	if(y - 1 < 0):
 		colMinus2 = True
 	if(x + 1 > len(board)):
 		rowPlus1 = True
-	if(x + 2 > len(board)):
-		rowPlus2 = True
-	if(y + 2 > len(board[0])):
-		colPlus2 = True
 	if(y + 1 > len(board[0])):
 		colPlus1 = True
 	#Goes through each location 2 tiles away and sets
 	#it's var to what is at the board at that point
-	# x - 2 and y
-	if(rowMinus2):
-		atLocation = board[y - 2][x]
-	# x - 1 and y - 1
-	if(rowMinus1 and colMinus1):
-		atLocation = board[y - 1][x - 1]
 	# x - 1 and y
 	if(rowMinus1):
 		atLocation = board[y - 1][x]
 		if(checkIfSnakeHead(atLocation):
-			#this is a good move
-	# x - 1 and y + 1
-	if(rowMinus1 and colPlus1):
-		atLocation = board[y - 1][x + 1]
-	# x and y - 2
-	if(colMinus2):
-		atLocation = board[y][x - 2]
+			if(ifSnakeisBiggerAtLocation(atLocation)):
+				recommendations.append(True)
+				return recommendations
+			else 
+				recommendations.append(False)
+				return recommendations
+		else 
+			if(is_obstacle(x, y - 1, board)):
+				numberObstacles = numberObstacles + 1
 	# x and y - 1
 	if(colMinus1):
 		atLocation = board[y][x - 1]
 		if(checkIfSnakeHead(atLocation):
-			#this is a good move
+			if(ifSnakeisBiggerAtLocation(atLocation)):
+				recommendations.append(True)
+				return recommendations
+			else 
+				recommendations.append(False)
+				return recommendations
+		else 
+			if(is_obstacle(x - 1, y, board)):
+				numberObstacles = numberObstacles + 1
 	# x and y + 1
 	if(colPlus1):
 		atLocation = board[y][x + 1]
 		if(checkIfSnakeHead(atLocation):
-			#this is a good move
-	# x and y + 2
-	if(colPlus2):
-		atLocation = board[y][x + 2]
-	# x + 1 and y - 1
-	if(rowPlus1 and colMinus1):
-		atLocation = board[y + 1][x - 1]
+			if(ifSnakeisBiggerAtLocation(atLocation)):
+				recommendations.append(True)
+				return recommendations
+			else 
+				recommendations.append(False)
+				return recommendations
+		else 
+			if(is_obstacle(x + 1, y, board)):
+				numberObstacles = numberObstacles + 1
 	# x + 1 and y
 	if(rowPlus1):
 		atLocation = board[y + 1][x]
 		if(checkIfSnakeHead(atLocation):
-			#this is a good move
-	# x + 1 and y + 1
-	if(rowPlus1 and colPlus1):
-		atLocation = board[y + 1][x + 1]
-	# x + 2 and y
-	if(rowPlus2):
-		atLocation = board[y + 2][x]
+			if(ifSnakeisBiggerAtLocation(atLocation)):
+				recommendations.append(True)
+				return recommendations
+			else 
+				recommendations.append(False)
+				return recommendations
+		else 
+			if(is_obstacle(x, y + 1, board)):
+				numberObstacles = numberObstacles + 1
+	#Check if the next turn is a trap
+	if(numberObstacles > 2):
+		recommendations.append(False)
+		return recommendations
+	else 
+		recommendations.append(True)
+		return recomendations
 
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.

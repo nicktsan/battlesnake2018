@@ -1,4 +1,5 @@
 from battlesnake_functions import *
+import operator
 import bottle
 import os
 import random
@@ -9,20 +10,6 @@ from tflearn.layers.core import input_data, fully_connected
 from tflearn.layers.estimator import regression
 from statistics import mean
 from collections import Counter
-
-class SnakeNN:
-	def __init__(self, initial_games = 10000, test_games = 1000, goal_steps = 2000, lr = 1e-2, filename = 'battlesnake_nn.tflearn'):
-		self.initial_games = initial_games
-		self.test_games = test_games
-		self.goal_steps = goal_steps
-		self.lr = lr
-		self.filename = filename
-		self.vectors_and_keys = [
-				[[-1, 0], 0],
-				[[0, 1], 1],
-				[[1, 0], 2],
-				[[0, -1], 3]
-		]
 
 @bottle.route('/')
 def static():
@@ -89,20 +76,65 @@ def move():
 
 	#We only need to do advanced decision making if there is more than 1 viable choice that will not kill the snake.
 	if (len(directions) > 1):
-		#make a points list for the length of remaining viable directions.
-		points = np.zeros(len(directions)) #np.zeros(x) creates an array of zeros of length x.
+
+		#make a dictionary for remaining viable directions.
+		#For example: if directions = ['up', 'down', 'right'] then moves will be
+		#							  {'up': 0, 'down': 0, 'right': 0}
+		moves = {}
+		for direction in directions:
+			moves[direction] = 0
+		"""
+		TODO assign points to corresponding choices
+		Let's say we want to give 'right' 3 points. Type:
+			moves['right'] += 3
+		moves will then become 
+			{'up': 0, 'down': 0, 'right': 3}
+		"""
+		#Find our head location
+		x2 = mysnake_head['x']
+		y2 = mysnake_head['y']
+
+		coordinate = []
+
+		for food in food_list['data']:    # Find a food
+			x1 = food['x']
+			y1 = food['y']
+			# check all obstacles in between (call function)
+			distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
+			# get the coordinate of all other snakes
+			# call obstacles in between function
+			# call calc_distance function
+			#compare our distance with their distance
+			# if they are closer, abandon the food, find next food and go through the same process 
+			# got the food that we are closer than others, store it in list
+			coordinate.append([distance, x1, y1])	    #store distancea and coordinatea in list
+		coordinate = sorted(coordinate, key=lambda x: x[0])   	#sort all the coordinate base on distance
 		
-		#TODO assign points to corresponding choices
-
-
-
-		#calculate which remaining option has the most points
-		max_point_index = np.argwhere(points == np.amax(points))
-		top_dirs = []
-		#create a list of indeces of highest points.
-		for index in max_point_index:
-			top_dirs.append(directions[index[0]])
-		direction = random.choice(top_dirs)
+		row = coordinate[0]
+		food_dist = row[0]
+		x1 = row[1]
+		y1 = row[2]
+		path = jps((x2, y2), (x1, y1), board)
+		if path != None:
+			head, nextNode = path[0][0], path[0][1]
+			vect = calc_vec(head[0], head[1], nextNode[0], nextNode[1])
+			vX, vY = vect[0], vect[1]
+			if (vX < 0):
+				if ('left' in moves):
+					moves['left'] += 1
+			if (vX > 0):
+				if ('right' in moves):
+					moves['right'] += 1
+			if (vY < 0):
+				if ('up' in moves):
+					moves['up'] += 1
+			if (vY > 0):
+				if ('down' in moves):
+					moves['down'] += 1
+		#get the direction with the most points, return that as the final direction
+		direction = max(moves.iteritems(), key = operator.itemgetter(1))[0]
+	
+	
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

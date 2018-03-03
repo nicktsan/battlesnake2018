@@ -69,6 +69,10 @@ def check_upright(x, y, board):
 def check_downright(x, y, board):
 	return is_obstacle(x+1, y+1, board)
 
+#calculates the vector between start and end points
+def calc_vec(startX, startY, endX, endY):
+	return (endX-startX, endY-startY)
+
 #calculates distance between point 1 and point 2
 def calc_distance(x1, y1, x2, y2):
 	horizontal_distance = x1 - x2
@@ -88,10 +92,10 @@ def reconstruct_path(parent, current):
 		num_turns += calc_distance(prev[0], prev[1], current[0], current[1])
 		total_path.append(current)
 	#simple_grid[total_path[0][1]][total_path[0][0]] = 5
-	"""
-	print "finished:"
-	print_grid()
-	"""
+	
+	#print "finished:"
+	#print_grid()
+	
 	return [list(reversed(total_path)), num_turns]
 
 def norm_dir(cX, cY, pX, pY):
@@ -138,7 +142,7 @@ def find_neighbours(cX, cY, parent, board):
 			if check_right(cX, cY, board):
 				neighbours.append((cX+1, cY+dY))
 			if check_left(cX, cY, board):
-				neighbours.append((cX+dX, cY-1))
+				neighbours.append((cX-1, cY+dY))
 
 	if (dX != 0 and dY == 0):
 		if not is_obstacle(cX+dX, cY, board):
@@ -155,6 +159,7 @@ def jump(cX, cY, dX, dY, goal, board):
 	#goal should be an (x, y) object
 	#cX, cY = current point coords
 	#dX, dY = direction vectors
+	# "dX, dY = %i, %i" % (dX, dY)
 	nextX = cX + dX
 	nextY = cY + dY
 	nextX2 = nextX + dX
@@ -188,20 +193,6 @@ def jump(cX, cY, dX, dY, goal, board):
 		if (nextX2, nextY2) == goal:
 			return (nextX2, nextY2)
 
-	#check if direction is horizontal
-	if (dX != 0 and dY == 0):
-		#check if goal is above or below the next point. If it is, return next point as a jump point.
-		if ((nextX, nextY-1) == goal or (nextX, nextY-1) == goal):
-			return (nextX, nextY)
-		if check_up(nextX, nextY, board) and not check_up(nextX+dX, nextY, board):
-			return (nextX, nextY)
-		if check_down(nextX, nextY, board) and not check_down(nextX+dX, nextY, board):
-			return (nextX, nextY)
-		if (is_obstacle(nextX2, nextY, board)):
-			return None
-		if ((nextX2, nextY) == goal):
-			return (nextX2, nextY)
-
 	#check if direction is vertical
 	if (dX == 0 and dY != 0):
 		#check if goal is to the left or right of the next point. If it is, return next point as a jump point.
@@ -215,6 +206,20 @@ def jump(cX, cY, dX, dY, goal, board):
 			return None
 		if ((nextX, nextY2) == goal):
 			return (nextX, nextY2)
+
+	#check if direction is horizontal
+	if (dX != 0 and dY == 0):
+		#check if goal is above or below the next point. If it is, return next point as a jump point.
+		if ((nextX, nextY-1) == goal or (nextX, nextY-1) == goal):
+			return (nextX, nextY)
+		if check_up(nextX, nextY, board) and not check_up(nextX+dX, nextY, board):
+			return (nextX, nextY)
+		if check_down(nextX, nextY, board) and not check_down(nextX+dX, nextY, board):
+			return (nextX, nextY)
+		if (is_obstacle(nextX2, nextY, board)):
+			return None
+		if ((nextX2, nextY) == goal):
+			return (nextX2, nextY)
 	
 	return jump(nextX, nextY, dX, dY, goal, board)
 
@@ -222,15 +227,22 @@ def jump(cX, cY, dX, dY, goal, board):
 def find_successors(cX, cY, parent, goal, board):
 	successors = []
 	#find non-obstacle neighbours
-	# "current: (%i, %i)" % (cX, cY)
+	# "finding successors for current: (%i, %i)" % (cX, cY)
 	# "parent: "
 	# parent.get((cX, cY), 0)
 	neighbours = find_neighbours(cX, cY, parent.get((cX, cY), 0), board)
+	#print "neighbours"
+	#print neighbours
 	for neighbour in neighbours:
 		dX = neighbour[0] - cX
 		dY = neighbour[1] - cY
 		jumpPoint = jump(cX, cY, dX, dY, goal, board)
+		
+
 		if jumpPoint:
+			#simple_grid[jumpPoint[1]][jumpPoint[0]] = 3
+			#print "new grid"
+			#print_grid()
 			successors.append(jumpPoint)
 	return successors #should return a list of (x, y) objects
 
@@ -246,7 +258,7 @@ def jps(start, goal, board):
 	x0, y0 = start[0], start[1]
 	x1, y1 = goal[0], goal[1]
 
-	if (is_obstacle(x0, y0, board) or is_obstacle(x1, y1, board)):
+	if (is_obstacle(x1, y1, board)):
 		return None
 
 	closed_set = set()
@@ -258,6 +270,8 @@ def jps(start, goal, board):
 	heapq.heappush(pqueue, (fscore[start], start))
 	while(pqueue):
 		current = tuple(heapq.heappop(pqueue)[1])
+		#print "current:"
+		#print current
 		#simple_grid[current[1]][current[0]] = 3
 		
 		if (current == goal):
@@ -279,12 +293,14 @@ def jps(start, goal, board):
 				heapq.heappush(pqueue, (fscore[jumpPoint], jumpPoint))
 
 	return None
-"""
+
 def print_grid():
 	for row in simple_grid:
 		for e in row:
 			print e,
 		print
+		
+"""
 
 food_spawn= {'data': 
 			[
@@ -337,18 +353,18 @@ snake_spawn= {
 		  "data": [
 			{
 			  "object": "point",
-			  "x": 6,
-			  "y": 15
+			  "x": 15,
+			  "y": 13
 			},
 			{
 			  "object": "point",
-			  "x": 7,
-			  "y": 15
+			  "x": 15,
+			  "y": 12
 			},
 			{
 			  "object": "point",
-			  "x": 8,
-			  "y": 15
+			  "x": 15,
+			  "y": 11
 			}
 		  ],
 		  "object": "list"
@@ -360,29 +376,6 @@ snake_spawn= {
 		"object": "snake",
 		"taunt": ""
 	  },
-	  {
-		"body": {
-		  "data": [
-			{
-			  "object": "point",
-			  "x": 0,
-			  "y": 1
-			},
-			{
-			  "object": "point",
-			  "x": 1,
-			  "y": 0
-			},
-		  ],
-		  "object": "list"
-		},
-		"health": 100,
-		"id": "48ca23a2-dde8-4d0p-b03a-61cc9780427e",
-		"length": 3,
-		"name": "Omae wa Snake",
-		"object": "snake",
-		"taunt": ""
-	  }
 	],
 	"object": "list"
   }
@@ -397,10 +390,10 @@ for h in range(0, 20):
 		if (grid[h][w] != 'food' and grid[h][w] != 0):
 			simple_grid[h][w] = 1
 
-begin = (0, 0)
-dest = (0, 9)
+begin = (15, 13)
+dest = (15, 18)
 simple_grid[begin[1]][begin[0]] = 3
-
+simple_grid[dest[1]][dest[0]] = 2
 print "starting grid: "
 print_grid()
 

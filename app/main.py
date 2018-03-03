@@ -1,5 +1,4 @@
 from battlesnake_functions import *
-import operator
 import bottle
 import os
 import random
@@ -129,33 +128,9 @@ def move():
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
-
-	path = jps((x2, y2), (x1, y1), board)
-	if path != None:
-			head, nextNode = path[0][0], path[0][1]
-			vect = calc_vec(head[0], head[1], nextNode[0], nextNode[1])
-			vX, vY = vect[0], vect[1]
-			if (vX < 0):
-				if ('left' in moves):
-					moves['left'] += 1
-			if (vX > 0):
-				if ('right' in moves):
-					moves['right'] += 1
-			if (vY < 0):
-				if ('up' in moves):
-					moves['up'] += 1
-			if (vY > 0):
-				if ('down' in moves):
-					moves['down'] += 1
-		#get the direction with the most points, return that as the final direction
-	direction = max(moves.iteritems(), key = operator.itemgetter(1))[0]
 	
 	
-
-
-
 	#figure out which way to turn
-	"""
 	if (x1 > x2):       # if food is on right hand side
 		if (y1 > y2):    # if food is down-right
 			direction = 'down'
@@ -175,7 +150,7 @@ def move():
 			direction = 'down'
 		else:            #food is directly above
 			direction = 'up'      
-	"""
+	
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

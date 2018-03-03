@@ -83,7 +83,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 	else:		
 		coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
 	
-	return coordinate,x2,y2
+	return coordinate
 
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.

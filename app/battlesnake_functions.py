@@ -59,7 +59,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 					continue
 				elif (distance > other_distance):
 					food_ok = False
-					
+
 				else:
 					other_length = other_snake['length']
 					our_length = mysnake['length']

@@ -125,7 +125,8 @@ def move():
 	x1 = row[1]
 	y1 = row[2]
 	"""
-	coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake, othersnake_tail)
+	#coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake, othersnake_tail)
+	coordinate,x2,y2 = seek_food(mysnake_head, mysnake, othersnake_tail)
 	"""
 	row = coordinate[0]             #choose row 0 as the closest food
 	food_dist = row[0]

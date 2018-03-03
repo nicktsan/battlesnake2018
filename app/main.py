@@ -104,7 +104,7 @@ def move():
 		else:									#if there is a path
 			#get the next move HELP!
 				#figure out which way to turn
-			
+
 			is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
 			is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
 			is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
@@ -177,7 +177,7 @@ def move():
 						directions.remove('left')
 					if (is_down == True):
 						directions.remove('down')
-			direction = directions[0]
+	direction = directions[0]
 
 	#if no move availble from the above for loop, do a survival step that won't kill us HELP!
 

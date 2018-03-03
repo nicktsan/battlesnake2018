@@ -136,7 +136,7 @@ def move():
 			x1 = row[1]
 			y1 = row[2]
 			path = jps((x2, y2), (x1, y1), board)
-			if path = None:
+			if path == None:
 				counter += 1
 				continue
 			else:

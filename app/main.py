@@ -47,12 +47,12 @@ def start():
 	# TODO: Do things with data
 
 	return {
-		'color': '#ff9000',
+		'color': '#FF0000',
 		'taunt': 'dat is not de wae',
 		'head_url': head_url,
 		'name': 'nicksnek',
-		'head_type': 'tongue',
-		'tail_type': 'round-bum'
+		'head_type': 'fang',
+		'tail_type': 'block-bum'
 	}
 
 

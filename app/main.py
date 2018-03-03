@@ -128,28 +128,91 @@ def move():
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
+
+	is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
+	is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
+	is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
+	is_down = check_down(mysnake_head['x'], mysnake_head['y'], board)
+	
+	# TODO: Do things with data
 	
 	
 	#figure out which way to turn
 	if (x1 > x2):       # if food is on right hand side
 		if (y1 > y2):    # if food is down-right
-			direction = 'down'
+			directions = ['down', 'right', 'up', 'left']
+			if (is_down == True):
+			directions.remove('down')
+			if (is_right == True):
+			directions.remove('right')
+			if (is_up == True):
+			directions.remove('up')
+			direction = random.choice(directions)
 		elif(y1 < y2):   # if food is up-right
-			direction = 'up'
+			directions = ['up', 'right', 'down', 'left']
+			if (is_up == True):
+			directions.remove('up')
+			if (is_right == True):
+			directions.remove('right')
+			if (is_down == True):
+			directions.remove('down')
+			direction = random.choice(directions)
 		else:
-			direction = 'right'
+			directions = ['right', 'up', 'down', 'left']
+			if (is_right == True):
+			directions.remove('right')
+			if (is_up == True):
+			directions.remove('up')
+			if (is_down == True):
+			directions.remove('down')
+			direction = random.choice(directions)
 	elif (x1 < x2):      # food is on the left hand side
 		if (y1 > y2):    #food is down-left
-			direction = 'down'
+			directions = ['down', 'left', 'up', 'right']
+			if (is_down == True):
+			directions.remove('down')
+			if (is_left == True):
+			directions.remove('left')
+			if (is_up == True):
+			directions.remove('up')
+			direction = random.choice(directions)
 		elif(y1 < y2):   #food is up-left
-			direction = 'up'
+			directions = ['up', 'left', 'down', 'right']
+			if (is_up == True):
+			directions.remove('up')
+			if (is_left == True):
+			directions.remove('left')
+			if (is_down == True):
+			directions.remove('down')
+			direction = random.choice(directions)
 		else:
-			direction = 'left'
+			directions = ['left', 'up', 'down', 'right']
+			if (is_left == True):
+			directions.remove('left')
+			if (is_up == True):
+			directions.remove('up')
+			if (is_down == True):
+			directions.remove('down')
+			direction = random.choice(directions)
 	else:
 		if (y1 > y2):    #food is directly below
-			direction = 'down'
+			directions = ['down', 'up', 'left', 'right']
+			if (is_down == True):
+			directions.remove('down')
+			if (is_up == True):
+			directions.remove('up')
+			if (is_left == True):
+			directions.remove('left')
+			direction = random.choice(directions)
 		else:            #food is directly above
-			direction = 'up'      
+			directions = ['down', 'up', 'left', 'right']
+			if (is_up == True):
+			directions.remove('up')
+			if (is_left == True):
+			directions.remove('left')
+			if (is_down == True):
+			directions.remove('down')
+			direction = random.choice(directions)    
 	
 	return {
 		'move': direction,

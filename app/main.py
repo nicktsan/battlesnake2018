@@ -123,120 +123,91 @@ def move():
 	y1 = row[2]
 	"""
 	coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake)
-	"""
-	row = coordinate           #choose row 0 as the closest food
+
+	counter = 0
+
+	row = coordinate[counter]             #choose row 0 as the closest food
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
-	"""
+
 	is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
 	is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
 	is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)
 	is_down = check_down(mysnake_head['x'], mysnake_head['y'], board)
 	
 	# TODO: Do things with data
-	my_tail = mysnake['body']['data'][-1]
-	x3 = my_tail['x']
-	y3 = my_tail['y']
 	
-	for row in coordinate:
-		food_dist = row[0]
-		x1 = row[1]
-		y1 = row[2]
-
-		#figure out which way to turn
-		if (x1 > x2):       # if food is on right hand side
-			if (y1 > y2):    # if food is down-right
-				directions = ['down', 'right', 'up', 'left']
-				if (is_down == True):
-					directions.remove('down')
-				if (is_right == True):
-					directions.remove('right')
-				if (is_up == True):
-					directions.remove('up')
-			elif(y1 < y2):   # if food is up-right
-				directions = ['up', 'right', 'down', 'left']
-				if (is_up == True):
-					directions.remove('up')
-				if (is_right == True):
-					directions.remove('right')
-				if (is_down == True):
-					directions.remove('down')
-			else:
-				directions = ['right', 'up', 'down', 'left']
-				if (is_right == True):
-					directions.remove('right')
-				if (is_up == True):
-					directions.remove('up')
-				if (is_down == True):
-					directions.remove('down')
-		elif (x1 < x2):      # food is on the left hand side
-			if (y1 > y2):    #food is down-left
-				directions = ['down', 'left', 'up', 'right']
-				if (is_down == True):
-					directions.remove('down')
-				if (is_left == True):
-					directions.remove('left')
-				if (is_up == True):
-					directions.remove('up')
-			elif(y1 < y2):   #food is up-left
-				directions = ['up', 'left', 'down', 'right']
-				if (is_up == True):
-					directions.remove('up')
-				if (is_left == True):
-					directions.remove('left')
-				if (is_down == True):
-					directions.remove('down')
-			else:
-				directions = ['left', 'up', 'down', 'right']
-				if (is_left == True):
-					directions.remove('left')
-				if (is_up == True):
-					directions.remove('up')
-				if (is_down == True):
-					directions.remove('down')
+	
+	#figure out which way to turn
+	if (x1 > x2):       # if food is on right hand side
+		if (y1 > y2):    # if food is down-right
+			directions = ['down', 'right', 'up', 'left']
+			if (is_down == True):
+				directions.remove('down')
+			if (is_right == True):
+				directions.remove('right')
+			if (is_up == True):
+				directions.remove('up')
+		elif(y1 < y2):   # if food is up-right
+			directions = ['up', 'right', 'down', 'left']
+			if (is_up == True):
+				directions.remove('up')
+			if (is_right == True):
+				directions.remove('right')
+			if (is_down == True):
+				directions.remove('down')
 		else:
-			if (y1 > y2):    #food is directly below
-				directions = ['down', 'up', 'left', 'right']
-				if (is_down == True):
-					directions.remove('down')
-				if (is_up == True):
-					directions.remove('up')
-				if (is_left == True):
-					directions.remove('left')
-			else:            #food is directly above
-				directions = ['up', 'left', 'right', 'up']
-				if (is_up == True):
-					directions.remove('up')
-				if (is_left == True):
-					directions.remove('left')
-				if (is_down == True):
-					directions.remove('down')
-		direction = directions[0]
-		if direction == 'left':
-			x4 = x2-1
-			y4 = y2
-			path = jps((x4, y4), (x3, y3), board)
-			if path == None:
-				continue
-		elif direction == 'right':
-			x4 = x2+1
-			y4 = y2
-			path = jps((x4, y4), (x3, y3), board)
-			if path == None:
-				continue
-		elif direction == 'up':
-			x4 = x2
-			y4 = y2-1
-			path = jps((x4, y4), (x3, y3), board)
-			if path == None:
-				continue
-		elif direction == 'down':
-			x4 = x2
-			y4 = y2+1
-			path = jps((x4, y4), (x3, y3), board)
-			if path == None:
-				continue
+			directions = ['right', 'up', 'down', 'left']
+			if (is_right == True):
+				directions.remove('right')
+			if (is_up == True):
+				directions.remove('up')
+			if (is_down == True):
+				directions.remove('down')
+	elif (x1 < x2):      # food is on the left hand side
+		if (y1 > y2):    #food is down-left
+			directions = ['down', 'left', 'up', 'right']
+			if (is_down == True):
+				directions.remove('down')
+			if (is_left == True):
+				directions.remove('left')
+			if (is_up == True):
+				directions.remove('up')
+		elif(y1 < y2):   #food is up-left
+			directions = ['up', 'left', 'down', 'right']
+			if (is_up == True):
+				directions.remove('up')
+			if (is_left == True):
+				directions.remove('left')
+			if (is_down == True):
+				directions.remove('down')
+		else:
+			directions = ['left', 'up', 'down', 'right']
+			if (is_left == True):
+				directions.remove('left')
+			if (is_up == True):
+				directions.remove('up')
+			if (is_down == True):
+				directions.remove('down')
+	else:
+		if (y1 > y2):    #food is directly below
+			directions = ['down', 'up', 'left', 'right']
+			if (is_down == True):
+				directions.remove('down')
+			if (is_up == True):
+				directions.remove('up')
+			if (is_left == True):
+				directions.remove('left')
+		else:            #food is directly above
+			directions = ['up', 'left', 'right', 'up']
+			if (is_up == True):
+				directions.remove('up')
+			if (is_left == True):
+				directions.remove('left')
+			if (is_down == True):
+				directions.remove('down')
+	direction = directions[0]
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

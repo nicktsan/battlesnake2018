@@ -97,23 +97,23 @@ def move():
     #figure out which way to turn
 	if (x1 > x2):       # if food is on right hand side
 		if (y1 > y2):    # if food is down-right
-	        direction = 'down'
-	    elif(y1 < y2):   # if food is up-right
-	        direction = 'up'
-	    else:
-	        direction = 'right'
+	  		direction = 'down'
+		elif(y1 < y2):   # if food is up-right
+	   		direction = 'up'
+		else:
+		   	direction = 'right'
 	elif (x1 < x2):      # food is on the left hand side
-	    if (y1 > y2):    #food is down-left
-	        direction = 'down'
-	    elif(y1 < y2):   #food is up-left
-	        direction = 'up'
-	    else:
-	        direction = 'left'
+		if (y1 > y2):    #food is down-left
+			direction = 'down'
+		elif(y1 < y2):   #food is up-left
+	   		direction = 'up'
+		else:
+			direction = 'left'
 	else:
-	    if (y1 > y2):    #food is directly below
-	        direction = 'down'
-	    else:            #food is directly above
-	        direction = 'up'      
+		if (y1 > y2):    #food is directly below
+	   		direction = 'down'
+		else:            #food is directly above
+			direction = 'up'      
 	#is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
 	#is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
 	#is_up = check_up(mysnake_head['x'], mysnake_head['y'], board)

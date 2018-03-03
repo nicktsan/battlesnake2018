@@ -1,4 +1,5 @@
 from battlesnake_functions import *
+import operator
 import bottle
 import os
 import random

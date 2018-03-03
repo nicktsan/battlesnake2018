@@ -258,8 +258,8 @@ def jps(start, goal, board):
 	x0, y0 = start[0], start[1]
 	x1, y1 = goal[0], goal[1]
 
-	if (is_obstacle(x1, y1, board)):
-		return None
+	#if (is_obstacle(x1, y1, board)):
+	#	return None
 
 	closed_set = set()
 	parent = {} #empty map

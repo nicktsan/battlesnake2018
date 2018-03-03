@@ -48,7 +48,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 		# check all obstacles in between (call function)
 		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
 		# get the coordinate of all other snakes
-		
+		"""
 		for other_snake in snake_list['data']:
 			if (other_snake['id'] != mysnake['id']):
 				othersnake_head = other_snake['body']['data'][0]
@@ -68,7 +68,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 						continue
 					else:
 						food_ok = False
-			
+		"""	
 		if (food_ok == True):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
 	   
@@ -77,7 +77,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
-	return (x1,y1)
+	return (x1,y1,x2,y2)
 
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.

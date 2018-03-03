@@ -50,8 +50,8 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 		# get the coordinate of all other snakes
 		
 		for other_snake in snake_list['data']:
-			"""
-			if (other_snake['id'] != mysnake['id']):
+			if (other_snake['id'] != mysnake['id']): 
+				"""
 				othersnake_head = other_snake['body']['data'][0]
 				x3 = othersnake_head['x']
 				y3 = othersnake_head['y']

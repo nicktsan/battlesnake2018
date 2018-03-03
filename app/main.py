@@ -34,12 +34,12 @@ def start():
 	# TODO: Do things with data
 
 	return {
-		'color': '#FF0000',
+		'color': '#FF9000',
 		'taunt': 'dat is not de wae',
 		'head_url': head_url,
 		'name': 'nicksnek',
-		'head_type': 'fang',
-		'tail_type': 'block-bum'
+		'head_type': 'tongue',
+		'tail_type': 'round-bum'
 	}
 
 
@@ -55,8 +55,10 @@ def move():
 	directions = ['up', 'down', 'left', 'right']
 	mysnake_head = mysnake['body']['data'][0] #should get the head's point
 	mysnake_neck = mysnake['body']['data'][1] #should get the neck's point
+	mylength =  mysnake['length']
+	myhealth = mysnake['health']
 
-	board = init_board(food_list, snake_list, board_width, board_height)
+	board = init_board(food_list, snake_list, board_width, board_height, mysnake_head)
 	
 	is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
 	is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)
@@ -76,7 +78,6 @@ def move():
 
 	#We only need to do advanced decision making if there is more than 1 viable choice that will not kill the snake.
 	if (len(directions) > 1):
-
 		#make a dictionary for remaining viable directions.
 		#For example: if directions = ['up', 'down', 'right'] then moves will be
 		#							  {'up': 0, 'down': 0, 'right': 0}
@@ -86,51 +87,46 @@ def move():
 		"""
 		TODO assign points to corresponding choices
 		Let's say we want to give 'right' 3 points. Type:
-			moves['right'] += 3
+			moves['right'] += 3 
 		moves will then become 
 			{'up': 0, 'down': 0, 'right': 3}
 		"""
-		#Find our head location
-		x2 = mysnake_head['x']
-		y2 = mysnake_head['y']
-
-		coordinate = []
-
-		for food in food_list['data']:    # Find a food
-			x1 = food['x']
-			y1 = food['y']
-			# check all obstacles in between (call function)
-			distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
-			# get the coordinate of all other snakes
-			# call obstacles in between function
-			# call calc_distance function
-			#compare our distance with their distance
-			# if they are closer, abandon the food, find next food and go through the same process 
-			# got the food that we are closer than others, store it in list
-			coordinate.append([distance, x1, y1])	    #store distancea and coordinatea in list
-		coordinate = sorted(coordinate, key=lambda x: x[0])   	#sort all the coordinate base on distance
+		goal_points = seek_food(mysnake_head, food_list, snake_list, mysnake)
+		#goal_points is a list of [distance, x, y] objects
+		for goal_point in goal_points:
+			path = jps((mysnake_head['x'], mysnake_head['y']), (goal_point[1], goal_point[2]), board)
+			if path != None:
+				head, nextNode = path[0][0], path[0][1]
+				vect = calc_vec(head[0], head[1], nextNode[0], nextNode[1])
+				vX, vY = vect[0], vect[1]
+				score = (101 - myhealth)*0.01
+				if (vX < 0):
+					if ('left' in moves):
+						moves['left'] += score
+				if (vX > 0):
+					if ('right' in moves):
+						moves['right'] += score
+				if (vY < 0):
+					if ('up' in moves):
+						moves['up'] += score
+				if (vY > 0):
+					if ('down' in moves):
+						moves['down'] += score
+				break
 		
-		row = coordinate[0]
-		food_dist = row[0]
-		x1 = row[1]
-		y1 = row[2]
-		path = jps((x2, y2), (x1, y1), board)
-		if path != None:
-			head, nextNode = path[0][0], path[0][1]
-			vect = calc_vec(head[0], head[1], nextNode[0], nextNode[1])
-			vX, vY = vect[0], vect[1]
-			if (vX < 0):
-				if ('left' in moves):
-					moves['left'] += 1
-			if (vX > 0):
-				if ('right' in moves):
-					moves['right'] += 1
-			if (vY < 0):
-				if ('up' in moves):
-					moves['up'] += 1
-			if (vY > 0):
-				if ('down' in moves):
-					moves['down'] += 1
+		for move in moves:
+			x, y = mysnake_head['x'], mysnake_head['y']
+			if move == 'left':
+				x -= 1
+			if move == 'right':
+				x += 1
+			if move == 'up':
+				y -= 1
+			if move == 'down':
+				y += 1
+			num_obstacles = checkOneTileAway(board, x, y, mylength, snake_list)
+			penalty = -0.25
+			moves[move] = moves[move] - penalty*num_obstacles
 		#get the direction with the most points, return that as the final direction
 		direction = max(moves.iteritems(), key = operator.itemgetter(1))[0]
 	

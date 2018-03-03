@@ -70,9 +70,6 @@ def move():
 	mysnake_neck = mysnake['body']['data'][1] #should get the neck's point
 
 	board = init_board(food_list, snake_list, board_width, board_height)
-	
-	for other_snake in snake_list['data']:
-		othersnake_tail = other_snake['body']['data'][0]
 	"""
 	x2 = mysnake_head['x']
 	y2 = mysnake_head['y']
@@ -125,17 +122,14 @@ def move():
 	x1 = row[1]
 	y1 = row[2]
 	"""
-	#coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake, othersnake_tail)
-	coordinate,x2,y2 = seek_food(mysnake_head, othersnake_tail)
-	"""
+	coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake)
+
 	row = coordinate[0]             #choose row 0 as the closest food
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
-	"""
-	food_dist = coordinate[0]
-	x1 = coordinate[1]
-	y1 = coordinate[2]
+	
+	
 	#figure out which way to turn
 	if (x1 > x2):       # if food is on right hand side
 		if (y1 > y2):    # if food is down-right

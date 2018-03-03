@@ -83,9 +83,9 @@ def seek_food(mysnake_head,othersnake_tail):
 	for other_snake in snake_list['data']:
 		othersnake_tail = other_snake['body']['data'][0]
 		"""
-		x1 = othersnake_tail['x']
-		y1 = othersnake_tail['y']
-		coordinate = [0,x1,y1]
+	x1 = othersnake_tail['x']
+	y1 = othersnake_tail['y']
+	coordinate = [0,x1,y1]
 		
 	"""
 	else:

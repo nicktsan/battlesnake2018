@@ -71,6 +71,8 @@ def move():
 
 	board = init_board(food_list, snake_list, board_width, board_height)
 	
+	for other_snake in snake_list['data']:
+		othersnake_tail = other_snake['body']['data'][0]
 	"""
 	x2 = mysnake_head['x']
 	y2 = mysnake_head['y']
@@ -123,7 +125,7 @@ def move():
 	x1 = row[1]
 	y1 = row[2]
 	"""
-	coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake)
+	coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake, othersnake_tail)
 	"""
 	row = coordinate[0]             #choose row 0 as the closest food
 	food_dist = row[0]

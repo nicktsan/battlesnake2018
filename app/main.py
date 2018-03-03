@@ -71,7 +71,7 @@ def move():
 
 	board = init_board(food_list, snake_list, board_width, board_height)
 	
-	coordinate,x2,y2 = seek_food(mysnake_head, food_list, snake_list, mysnake)
+	coordinate = seek_food(mysnake_head, food_list, snake_list, mysnake)
 
 	counter = 0
 

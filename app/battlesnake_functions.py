@@ -1,6 +1,6 @@
 #create a board and fill it with food, snakes, and our snake
 def init_board(food_list, snake_list, width, height):
-	#initialize a 2d list of 0's with width rows and height columns
+	#initialize a 2d list of 0's with width columns and height rows.
 	board = [([0] * width) for row in xrange(height)]
 	#fill in food locations
 	for food in food_list['data']:
@@ -9,11 +9,41 @@ def init_board(food_list, snake_list, width, height):
 		board[y][x] = 'food'
 	#fill in snake body locations with their id
 	for snake in snake_list['data']: #snake contains all info within a snake's 'data'
-		for point in snake['body']['data']:
-			x = point['x']
-			y = point['y']
-			board[y][x] = snake['id']
+		for index in range(0, len(snake['body']['data'])):
+			x = snake['body']['data'][index]['x']
+			y = snake['body']['data'][index]['y']
+			board[y][x] = [snake['id'], index]
 	return board
+
+#to refer an x,y point on the board, type it as board[y][x]
+#checks if point xy is an obstacle
+def is_obstacle(x, y, board):
+	if (board[y][x] != 'food' and board[y][x] != 0):
+		return True
+	return False
+
+#find slope between two points. Keep in mind for battlesnake the 
+#top left tile of the board is [0,0] and the bottom right tile
+#of the board is [width-1, height-1]
+def find_slope(x1, y1, x2, y2):
+	rise = y1 - y2
+	run = (x1 - x2)
+	return (float(rise)/float(run))*-1.0 #we need to multiply by -1 because y values become larger when you go down the grid.
+	#returns a positive or negative float, which will be our slope.
+
+#returns true if the position is a snake head that is 
+#connected to a smaller body than ours
+def checkIfSnakeHead(boardLocation):
+	if(isinstance(boardLocation, list):
+		if(boardLocation[1] == 0):
+			snakelength = 0
+			for snake in snake_list['data']:
+				if(snake['id'] == boardLocation[0]):
+					snakelength = snake['length']
+			if(mysnake[length] > snakelength):
+				return True
+			#else
+			return False
 
 #Takes in the board and our snakes head location
 #Goes through each tile location 2 tiles away and checks
@@ -46,95 +76,51 @@ def checkTwoTilesAway(board, x, y):
 	if(y + 1 > len(board[0])):
 		colPlus1 = True
 	#Goes through each location 2 tiles away and sets
-	#it's var to waht is at the board at that point
-	# x - 2 && y - 2
-	if(rowMinus2 && colMinus2):
-		atLocation = board[x - 2][y - 2]
-	# x - 2 && y - 1
-	if(rowMinus2 && colMinus1):
-		atLocation = board[x - 2][y - 1]
-	# x - 2 && y
+	#it's var to what is at the board at that point
+	# x - 2 and y
 	if(rowMinus2):
-		atLocation = board[x - 2][y]
-	# x - 2 && y + 1
-	if(rowMinus2 && colPlus1):
-		atLocation = board[x - 2][y + 1]
-	# x - 2 && y + 2
-	if(rowMinus2 && colPlus2):
-		atLocation = board[x - 2][y + 2]		 
-	# x - 1 && y - 2
-	if(rowMinus1 && colMinus2):
-		atLocation = board[x - 1][y - 2]
-	# x - 1 && y - 1
-	if(rowMinus1 && colMinus1):
-		atLocation = board[x - 1][y - 1]
-	# x - 1 && y
+		atLocation = board[y - 2][x]
+	# x - 1 and y - 1
+	if(rowMinus1 and colMinus1):
+		atLocation = board[y - 1][x - 1]
+	# x - 1 and y
 	if(rowMinus1):
-		atLocation = board[x - 1][y]
-	# x - 1 && y + 1
-	if(rowMinus1 && colPlus1):
-		atLocation = board[x - 1][y + 1]
-	# x - 1 && y + 2
-	if(rowMinus1 && colPlus2):
-		atLocation = board[x - 1][y + 2]
-	# x && y - 2
+		atLocation = board[y - 1][x]
+		if(checkIfSnakeHead(atLocation):
+			#this is a good move
+	# x - 1 and y + 1
+	if(rowMinus1 and colPlus1):
+		atLocation = board[y - 1][x + 1]
+	# x and y - 2
 	if(colMinus2):
-		atLocation = board[x][y - 2]
-	# x && y - 1
+		atLocation = board[y][x - 2]
+	# x and y - 1
 	if(colMinus1):
-		atLocation = board[x][y - 1]
-	# x && y + 1
+		atLocation = board[y][x - 1]
+		if(checkIfSnakeHead(atLocation):
+			#this is a good move
+	# x and y + 1
 	if(colPlus1):
-		atLocation = board[x][y + 1]
-	# x && y + 2
+		atLocation = board[y][x + 1]
+		if(checkIfSnakeHead(atLocation):
+			#this is a good move
+	# x and y + 2
 	if(colPlus2):
-		atLocation = board[x][y + 2]
-	# x + 1 && y - 2
-	if(rowPlus1 && colMinus2):
-		atLocation = board[x + 1][y - 2]
-	# x + 1 && y - 1
-	if(rowPlus1 && colMinus1):
-		atLocation = board[x + 1][y - 1]
-	# x + 1 && y
+		atLocation = board[y][x + 2]
+	# x + 1 and y - 1
+	if(rowPlus1 and colMinus1):
+		atLocation = board[y + 1][x - 1]
+	# x + 1 and y
 	if(rowPlus1):
-		atLocation = board[x + 1][y]
-	# x + 1 && y + 1
-	if(rowPlus1 && colPlus1):
-		atLocation = board[x + 1][y + 1]
-	# x + 1 && y + 2
-	if(rowPlus1 && colPlus2):
-		atLocation = board[x + 1][y + 2]
-	# x + 2 && y - 2
-	if(rowPlus2 && colMinus2):
-		atLocation = board[x + 2][y - 2]
-	# x + 2 && y - 1
-	if(rowPlus2 && colMinus1):
-		atLocation = board[x + 2][y - 1]
-	# x + 2 && y
+		atLocation = board[y + 1][x]
+		if(checkIfSnakeHead(atLocation):
+			#this is a good move
+	# x + 1 and y + 1
+	if(rowPlus1 and colPlus1):
+		atLocation = board[y + 1][x + 1]
+	# x + 2 and y
 	if(rowPlus2):
-		atLocation = board[x + 2][y]
-	# x + 2 && y + 1
-	if(rowPlus2 && colPlus1):
-		atLocation = board[x + 2][y + 1]
-	# x + 2 && y + 2
-	if(rowPlus2 && colPlus2):
-		atLocation = board[x + 2][y + 2]
-		 
-#to refer an x,y point on the board, type it as board[y][x]
-#checks if point xy is an obstacle
-def is_obstacle(x, y, board):
-	if (board[y][x] != 'food' and board[y][x] != 0):
-		return True
-	return False
-
-#find slope between two points. Keep in mind for battlesnake the 
-#top left tile of the board is [0,0] and the bottom right tile
-#of the board is [width-1, height-1]
-def find_slope(x1, y1, x2, y2):
-	rise = y1 - y2
-	run = (x1 - x2)
-	return (float(rise)/float(run))*-1.0 #we need to multiply by -1 because y values become larger when you go down the grid.
-	#returns a positive or negative float, which will be our slope.
+		atLocation = board[y + 2][x]
 
 #check if obstacles are to the left of point. Returns True
 #if something is to the left, and False if something isn't to the left.

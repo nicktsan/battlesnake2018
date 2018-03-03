@@ -87,9 +87,9 @@ def move():
 		for other_snake in snake_list['data']:
 			if (other_snake['id'] != mysnake['id']):
 				othersnake_head = other_snake['body']['data'][0]
-				#x3 = othersnake_head['x']
-				#y3 = othersnake_head['y']
-				#other_distance = calc_distance(x1,y1,x3,y3)
+				x3 = othersnake_head['x']
+				y3 = othersnake_head['y']
+				other_distance = calc_distance(x1,y1,x3,y3)
 				other_distance = 8
 				if (distance < other_distance):
 					continue

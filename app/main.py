@@ -93,7 +93,7 @@ def move():
 	food_dist = row[0]
 	x1 = row[1]
 	y1 = row[2]
-    
+    #
     #figure out which way to turn
 	#if (x1 > x2):       # if food is on right hand side
 	 #   if (y1 > y2):    # if food is down-right

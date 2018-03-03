@@ -177,7 +177,6 @@ def move():
 	#   for index in max_point_index:
 	#       top_dirs.append(directions[index[0]])
 	#   direction = random.choice(top_dirs)
-	direction = 'left'
 	return {
 		'move': direction,
 		'taunt': 'dat is not de wae'

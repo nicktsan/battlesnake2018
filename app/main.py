@@ -77,17 +77,15 @@ def start():
 @bottle.post('/move')
 def move():
 	data = bottle.request.json
-
-	for f in data['food']:
-        grid[f[0]][f[1]] = FOOD
-        
 	game_id = data.get('game_id')
 	board_width = data.get('width')
 	board_height = data.get('height')
-	mysnake = data['you']['body']['data']
+	mysnake = data['you']
 	snake_list = data['snakes']
-	mysnake_head = mysnake[0] #should get the head's point
-	# TODO: Do things with data
+	food_list = data['food'] #use food_list['data'][int]['x'] to get the 'x' point of food at index int in the food list
+	directions = ['up', 'down', 'left', 'right']
+	mysnake_head = mysnake['body']['data'][0] #should get the head's point
+	mysnake_neck = mysnake['body']['data'][1] #should get the neck's point
 	
 	above_headx, above_heady = get_up(mysnake_head)
 	directions = ['up', 'down', 'left', 'right']
@@ -98,11 +96,9 @@ def move():
 	x2 = mysnake_head['x'],
 	y2 = mysnake_head['y']
 	coordinate = []
-	#for food in food_list['data']:    # Find a food
-	#	x1 = food['x'],
-	#	y1 = food['y']
-	x1 = 4
-	y1 = 5
+	for food in food_list['data']:    # Find a food
+		x1 = food['x'],
+		y1 = food['y']
 		# check all obstacles in between (call function)
 		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
 		# get the coordinate of all other snakes
@@ -183,4 +179,4 @@ if __name__ == '__main__':
 		port=os.getenv('PORT', '8080'),
 debug = True)
 
- food = board[y][x] 
+food = board[y][x] 

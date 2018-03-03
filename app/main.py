@@ -99,7 +99,8 @@ def move():
 				head, nextNode = path[0][0], path[0][1]
 				vect = calc_vec(head[0], head[1], nextNode[0], nextNode[1])
 				vX, vY = vect[0], vect[1]
-				score = (101 - myhealth)*0.01
+				priority = 200
+				score = (priority - myhealth)*0.01
 				if (vX < 0):
 					if ('left' in moves):
 						moves['left'] += score
@@ -126,7 +127,10 @@ def move():
 				y += 1
 			num_obstacles = checkOneTileAway(board, x, y, mylength, snake_list)
 			penalty = -0.25
-			moves[move] = moves[move] - penalty*num_obstacles
+			if (num_obstacles > 1):
+				moves[move] = moves[move] - penalty*num_obstacles
+			if (num_obstacles >= 3):
+				moves[move] -= 10000
 		#get the direction with the most points, return that as the final direction
 		direction = max(moves.iteritems(), key = operator.itemgetter(1))[0]
 	

@@ -189,10 +189,8 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 		x1 = food['x']
 		y1 = food['y']
 		food_ok = True
-		# check all obstacles in between (call function)
-		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
+		distance = calc_distance(x1,y1,x2,y2)
 		# get the coordinate of all other snakes
-		
 		for other_snake in snake_list['data']:
 			if (other_snake['id'] != mysnake['id']): 
 				othersnake_head = other_snake['body']['data'][0]
@@ -213,16 +211,19 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 		
 		if (food_ok == True):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
-	   
+	
 	if not coordinate:
 		for other_snake in snake_list['data']:
-			#if (other_snake['id'] == mysnake['id']): 
-			othersnake_tail = other_snake['body']['data'][-1]
-			x3 = othersnake_tail['x']
-			y3 = othersnake_tail['y']
-			coordinate.append([distance, x3, y3])
-	else:		
-		coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
+			if (other_snake['id'] != mysnake['id']):
+				othersnake_tail = other_snake['body']['data'][-1]
+				x3 = othersnake_tail['x']
+				y3 = othersnake_tail['y']
+				coordinate.append([distance, x3, y3])
+	
+	else:
+		
+		coordinate = sorted(coordinate, key=lambda x:x[0]) #sort all the coordinate base on distance
+
 	return coordinate
 
 

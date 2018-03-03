@@ -80,7 +80,7 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 	if not coordinate:
 		"""
 	for other_snake in snake_list['data']:
-		othersnake_tail = other_snake['body']['data'][-1]
+		othersnake_tail = other_snake['body']['data'][0]
 		x1 = othersnake_tail['x']
 		y1 = othersnake_tail['y']
 		coordinate = [0,x1,y1]

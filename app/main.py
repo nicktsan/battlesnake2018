@@ -98,10 +98,11 @@ def move():
 	x2 = mysnake_head['x'],
 	y2 = mysnake_head['y']
 	coordinate = []
-	food = []
-	for food in food_list['data']:    # Find a food
-		x1 = food['x'],
-		y1 = food['y']
+	#for food in food_list['data']:    # Find a food
+	#	x1 = food['x'],
+	#	y1 = food['y']
+	x1 = 4
+	y1 = 5
 		# check all obstacles in between (call function)
 		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
 		# get the coordinate of all other snakes
@@ -114,7 +115,6 @@ def move():
 		# got the food that we are closer than others, store it in list
 		coordinate.append([distance, x1, y1])	    #store distancea and coordinatea in list
 	coordinate = sorted(coordinate, key=lambda x: x[0])   	#sort all the coordinate base on distance
-	row = []
 	for row in coordinate:					#choose row 0 as the closest food
 		food_dist = row[0]
 		x1 = row[1]

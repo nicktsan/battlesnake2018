@@ -55,11 +55,11 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 				x3 = othersnake_head['x']
 				y3 = othersnake_head['y']
 				other_distance = calc_distance(x1,y1,x3,y3)
-				"""
 				if (distance < other_distance):
 					continue
 				elif (distance > other_distance):
 					food_ok = False
+					"""
 				else:
 					other_length = other_snake['length']
 					our_length = mysnake['length']

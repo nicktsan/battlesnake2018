@@ -85,7 +85,8 @@ def move():
 		x1 = row[1]
 		y1 = row[2]
 
-		#get the direction of next move
+		#get the direction of next move HELP!
+
 		if (next_move = 'left'):
 			next_move_x,next_move_y = x2-1, y2
 		if (next_move = 'up'):
@@ -95,18 +96,13 @@ def move():
 		if (next_move = 'down'):
 			next_move_x,next_move_y = x2, y2+1
 		
-		path = jps((next_move_x, next_move_y), (x4, y4), board)   #starting point need to be changed (next tile -> our tail)
+		path = jps((next_move_x, next_move_y), (x4, y4), board)   #(next tile -> our tail)  
 		if path == None:                        #there is no path to the food or destination
 			continue
 		else:									#if there is a path
-			#get the next move
+			#get the next move HELP!
 
-	#if no move availble from the above for loop, do a survival step that won't kill us
-
-
-
-
-
+	#if no move availble from the above for loop, do a survival step that won't kill us HELP!
 
 	is_left = check_left(mysnake_head['x'], mysnake_head['y'], board)
 	is_right = check_right(mysnake_head['x'], mysnake_head['y'], board)

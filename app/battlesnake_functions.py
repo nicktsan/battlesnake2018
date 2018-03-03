@@ -78,11 +78,11 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 
 	if not coordinate:
 		"""
-	other_snake = snake_list['data']
-	othersnake_tail = other_snake['body']['data'][-2]
-	x1 = othersnake_tail['x']
-	y1 = othersnake_tail['y']
-	coordinate = [0,x1,y1]
+	for other_snake in snake_list['data']:
+		othersnake_tail = other_snake['body']['data'][-2]
+		x1 = othersnake_tail['x']
+		y1 = othersnake_tail['y']
+		coordinate = [0,x1,y1]
 	"""
 	else:
 		coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance

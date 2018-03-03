@@ -71,11 +71,11 @@ def move():
 
 	board = init_board(food_list, snake_list, board_width, board_height)
 	
-	x2 = mysnake_head['x'],
+	x2 = mysnake_head['x']
 	y2 = mysnake_head['y']
 	coordinate = []
 	for food in food_list['data']:    # Find a food
-	    x1 = food['x'],
+	    x1 = food['x']
 	    y1 = food['y']
         # check all obstacles in between (call function)
 	    distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head

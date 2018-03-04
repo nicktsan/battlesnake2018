@@ -1,0 +1,36 @@
+Order of Operations for Snake in Battlesnake 2018
+
+Init board
+	Creates a board of the game with all tiles initialized to 0 (type 'int')
+		Food tiles are labelled as 'food'. (type 'str')
+		Snake tiles are contain their snake id and the index number which corresponds to which part of their body it is. An index of 0 means that is the snake's head. (type 'list')
+
+
+Check tiles adjacent to the snake's head for obstacles.
+	Any option that would kill the snake is removed from the directions list.
+
+If number of remaining directions is > 1:
+	Make an array that will contain points that will be assigned to the snake's possible directions. All directions will have a default starting value of 0.
+	For example: 
+		if directions = ['up', 'left'], make an array of length 2. 
+		(points = np.zeros(len(directions)))
+		Index 0 of the "points" array will correspond to 'up' in the "directions" list. Index 1 of the "points" array will correspond to 'left' in the "directions" list.
+
+	Have the snake look for the closest food that is not closer to other snake heads and has a shortest path that is not being cut off.
+		Give points to directions that would move the snake closer to this food.
+		Example: 1 point. We can discuss how we scale the points. Eating food should have highest priority.
+
+	Have the snake check to see if there are other snakes 2 turns away.
+		If an enemy snake head is two turns away, check if our snake is longer. If our snake is shorter, subtract points to options that would take us closer to the enemy snake's head.
+		Example: subtract 0.5 points. We can discuss how we scale points.
+		We can discuss if we want to add points for trying to follow the enemy snake's head if they are shorter.
+		Example: add 0.5 points. Killing another snake is not our priority, but it would be a blowout.
+
+	Optional: If the snake can't find appropriate food or attempt to kill off another snake, try to follow an enemy snake's tail. Give points to directions that would get the snake closer to an enemy snake tail. Example: add 0.1 points. This is a low priority move.
+
+	Tally the points and find which direction has the highest number of points. Pick that as our direction. In the case of a tie breaker, we can either choose the first option or choose a random option between them. I would prefer to go for the first option if two choices are tied.
+
+Return our move direction and taunt.
+
+Do you want me to write a give_points(array points, array direction, string move, float number of points)?
+Any suggestions are welcome.

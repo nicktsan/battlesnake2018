@@ -16,48 +16,12 @@ def init_board(food_list, snake_list, width, height, myhead):
 			x = snake['body']['data'][index]['x']
 			y = snake['body']['data'][index]['y']
 			board[y][x] = [snake['id'], index]
-
-	#check for dead-ends, starting with our head. Dead ends are any space
-	#with three orthogonal obstacles.
-	"""
-	free = []
-	visited = []
-	for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
-		#start with our snake head
-		if (not is_obstacle(myhead['x']+i, myhead['y']+j, board)):
-			free.append((myhead['x']+i, myhead['y']+j))
-	while len(free) == 1:
-		cX, cY = free[0][0], free[0][1]
-		visited.append([cX, cY])
-		del free[:]
-		for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
-			if (not is_obstacle(cX+i, cY+j, board)):
-				free.append((cX+i, cY+j))
-	for x in range(0, width):
-		for y in range(0, height):
-			del free[:]
-			if (not is_obstacle(x, y, board) and [x, y] not in visited):
-				for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
-					if (not is_obstacle(x+i, y+j, board)):
-						free.append((x+i, y+j))
-				visited.append([x, y])
-				if len(free) == 1:
-					board[y][x] = 'dead end'
-				while len(free) == 1:
-					cX, cY = free[0][0], free[0][1]
-					visited.append([x, y])
-					board[cY][cX] = 'dead end'
-					del free[:]
-					for i,j in [(-1,0),(0,-1),(1,0),(0,1)]:
-						if (not is_obstacle(cX+i, cY+j, board)):
-							free.append((cX+i, cY+j))
-	"""
 	return board
 
 #to refer an x,y point on the board, type it as board[y][x]
 #checks if point xy is an obstacle
 def is_obstacle(x, y, board):
-	if (x < 0 or x >= len(board[0]) or y < 0 or y >= len(board)):
+	if ((x < 0) or (x >= len(board[0])) or (y < 0) or (y >= len(board))):
 		return True
 	if (board[y][x] != 'food' and board[y][x] != 0):
 		return True
@@ -149,7 +113,7 @@ def checkOneTileAway(board, x, y, mylength, snake_list):
 		atLocation = board[y][x - 1]
 		if checkIfSnakeHead(atLocation):
 			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
-				numberObstacles += 1
+				numberObstacles += 10
 		elif (is_obstacle(x-1, y, board)):
 				numberObstacles = numberObstacles + 1
 	#x and y - 1
@@ -157,7 +121,7 @@ def checkOneTileAway(board, x, y, mylength, snake_list):
 		atLocation = board[y-1][x]
 		if checkIfSnakeHead(atLocation):
 			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
-				numberObstacles += 1
+				numberObstacles += 10
 		elif(is_obstacle(x, y - 1, board)):
 				numberObstacles = numberObstacles + 1
 	# x and y+1
@@ -165,7 +129,7 @@ def checkOneTileAway(board, x, y, mylength, snake_list):
 		atLocation = board[y + 1][x]
 		if checkIfSnakeHead(atLocation):
 			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
-				numberObstacles += 1
+				numberObstacles += 10
 		elif(is_obstacle(x, y + 1, board)):
 				numberObstacles = numberObstacles + 1
 	# x + 1 and y
@@ -173,7 +137,7 @@ def checkOneTileAway(board, x, y, mylength, snake_list):
 		atLocation = board[y][x + 1]
 		if checkIfSnakeHead(atLocation):
 			if(ifSnakeisBiggerAtLocation(atLocation, mylength, snake_list) == False):
-				numberObstacles += 1
+				numberObstacles += 10
 		elif(is_obstacle(x + 1, y, board)):
 				numberObstacles = numberObstacles + 1
 	#Check if the next turn is a trap
@@ -184,15 +148,15 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 	x2 = mysnake_head['x']
 	y2 = mysnake_head['y']
 	coordinate = []
+	desperation = []
 	
 	for food in food_list['data']:    # Find a food
 		x1 = food['x']
 		y1 = food['y']
 		food_ok = True
-		# check all obstacles in between (call function)
-		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
+		distance = calc_distance(x1,y1,x2,y2)
+		desperation.append([distance, x1, y1])
 		# get the coordinate of all other snakes
-		
 		for other_snake in snake_list['data']:
 			if (other_snake['id'] != mysnake['id']): 
 				othersnake_head = other_snake['body']['data'][0]
@@ -213,16 +177,30 @@ def seek_food(mysnake_head, food_list, snake_list, mysnake):
 		
 		if (food_ok == True):
 			coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
-	   
-	if not coordinate:
-		for other_snake in snake_list['data']:
-			#if (other_snake['id'] == mysnake['id']): 
-			othersnake_tail = other_snake['body']['data'][-1]
-			x3 = othersnake_tail['x']
-			y3 = othersnake_tail['y']
-			coordinate.append([distance, x3, y3])
-	else:		
+
+	if (len(coordinate) == 0):
+		return sorted(desperation, key = lambda x:x[0])
+	else:
+		coordinate = sorted(coordinate, key=lambda x:x[0]) #sort all the coordinate base on distance
+
+	return coordinate
+
+def seek_food_under_threshold(mysnake_head, food_list, snake_list, mysnake):
+	x2 = mysnake_head['x']
+	y2 = mysnake_head['y']
+	coordinate = []
+	
+	for food in food_list['data']:    # Find a food
+		x1 = food['x']
+		y1 = food['y']
+		food_ok = True
+		# check all obstacles in between (call function)
+		distance = calc_distance(x1,y1,x2,y2)   #calculate the distance from food to head
+		# get the coordinate of all other snakes
+		
+		coordinate.append([distance, x1, y1])       #store distancea and coordinatea in list
 		coordinate = sorted(coordinate, key=lambda x:x[0])     #sort all the coordinate base on distance
+		
 	return coordinate
 
 

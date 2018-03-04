@@ -11,6 +11,7 @@ from tflearn.layers.estimator import regression
 from statistics import mean
 from collections import Counter
 
+
 @bottle.route('/')
 def static():
 	return "the server is running hello world"
@@ -74,8 +75,6 @@ def move():
 		directions.remove('left')
 	if (is_right == True):
 		directions.remove('right')
-	direction = random.choice(directions)
-
 	#We only need to do advanced decision making if there is more than 1 viable choice that will not kill the snake.
 	if (len(directions) > 1):
 		#make a dictionary for remaining viable directions.
@@ -92,6 +91,10 @@ def move():
 			{'up': 0, 'down': 0, 'right': 3}
 		"""
 		goal_points = seek_food(mysnake_head, food_list, snake_list, mysnake)
+
+		if(myhealth <= 60):
+			goal_points = seek_food_under_threshold(mysnake_head, food_list, snake_list, mysnake)
+
 		#goal_points is a list of [distance, x, y] objects
 		for goal_point in goal_points:
 			path = jps((mysnake_head['x'], mysnake_head['y']), (goal_point[1], goal_point[2]), board)
@@ -99,7 +102,8 @@ def move():
 				head, nextNode = path[0][0], path[0][1]
 				vect = calc_vec(head[0], head[1], nextNode[0], nextNode[1])
 				vX, vY = vect[0], vect[1]
-				score = (101 - myhealth)*0.01
+				priority = 200
+				score = (priority - myhealth)*0.01
 				if (vX < 0):
 					if ('left' in moves):
 						moves['left'] += score
@@ -126,10 +130,17 @@ def move():
 				y += 1
 			num_obstacles = checkOneTileAway(board, x, y, mylength, snake_list)
 			penalty = -0.25
-			moves[move] = moves[move] - penalty*num_obstacles
+			if (num_obstacles < 3):
+				if move in moves:
+					moves[move] = moves[move] - penalty*num_obstacles
+			if (num_obstacles >= 3):
+				if move in moves:
+					moves[move] = moves[move] - 20*num_obstacles
 		#get the direction with the most points, return that as the final direction
 		direction = max(moves.iteritems(), key = operator.itemgetter(1))[0]
-	
+	else:
+		direction = directions[0]
+		
 	
 	return {
 		'move': direction,
